@@ -1,0 +1,28 @@
+# Development files
+.husky/
+node_modules/
+.git/
+.gitignore
+
+# Documentation (keep only essential)
+SETUP_COMPLETE.md
+CONTRIBUTING.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test files
+coverage/
+*.test.js
+*.spec.js
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db

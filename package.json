@@ -1,0 +1,61 @@
+{
+  "name": "@programinglive/commiter",
+  "version": "1.0.0",
+  "description": "Commit convention tooling for standard-version releases with beautiful changelogs",
+  "main": "index.js",
+  "bin": {
+    "commiter": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "release": "standard-version",
+    "release:major": "npm run release -- --release-as major",
+    "release:minor": "npm run release -- --release-as minor",
+    "release:patch": "npm run release -- --release-as patch"
+  },
+  "keywords": [
+    "commit",
+    "conventional-commits",
+    "standard-version",
+    "changelog",
+    "versioning",
+    "semantic-release",
+    "git-hooks",
+    "husky",
+    "commitlint"
+  ],
+  "author": "Programming Live",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/programinglive/commiter.git"
+  },
+  "bugs": {
+    "url": "https://github.com/programinglive/commiter/issues"
+  },
+  "homepage": "https://github.com/programinglive/commiter#readme",
+  "type": "commonjs",
+  "standard-version": {
+    "releaseCommitMessageFormat": "chore(release): {{currentTag}} 🚀",
+    "types": [
+      { "type": "feat", "section": "✨ Features" },
+      { "type": "fix", "section": "🐛 Bug Fixes" },
+      { "type": "perf", "section": "⚡ Performance" },
+      { "type": "refactor", "section": "♻️ Refactors" },
+      { "type": "docs", "section": "📝 Documentation" },
+      { "type": "style", "section": "💄 Styles" },
+      { "type": "test", "section": "✅ Tests" },
+      { "type": "build", "section": "🏗️ Build System" },
+      { "type": "ci", "section": "👷 Continuous Integration" },
+      { "type": "chore", "section": "🧹 Chores" },
+      { "type": "revert", "section": "⏪ Reverts" }
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "husky": "^9.1.7",
+    "standard-version": "^9.5.0"
+  }
+}
