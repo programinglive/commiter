@@ -7,7 +7,7 @@
     "commiter": "./index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"No tests specified\"",
     "prepare": "husky",
     "release": "standard-version",
     "release:major": "npm run release -- --release-as major",
