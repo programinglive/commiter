@@ -60,10 +60,20 @@ function setupCommiter() {
     // Write updated package.json
     fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
 
-    // Create commitlint config
-    console.log('⚙️  Creating commitlint config...');
-    const commitlintConfig = `module.exports = { extends: ['@commitlint/config-conventional'] };\n`;
-    fs.writeFileSync('commitlint.config.js', commitlintConfig);
+    // Determine commitlint config format based on project module type
+    const isEsmProject = packageJson.type === 'module';
+    const commitlintConfigFile = isEsmProject ? 'commitlint.config.js' : 'commitlint.config.cjs';
+    const commitlintConfigContent = isEsmProject
+      ? `export default { extends: ['@commitlint/config-conventional'] }\n`
+      : `module.exports = { extends: ['@commitlint/config-conventional'] }\n`;
+
+    const legacyCommitlintConfigFile = isEsmProject ? 'commitlint.config.cjs' : 'commitlint.config.js';
+    if (fs.existsSync(legacyCommitlintConfigFile)) {
+      fs.rmSync(legacyCommitlintConfigFile);
+    }
+
+    console.log(`⚙️  Creating commitlint config (${commitlintConfigFile})...`);
+    fs.writeFileSync(commitlintConfigFile, commitlintConfigContent);
 
     // Initialize Husky
     console.log('🐶 Setting up Husky...');
