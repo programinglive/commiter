@@ -1,6 +1,6 @@
 {
   "name": "@programinglive/commiter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Commit convention tooling for standard-version releases with beautiful changelogs",
   "main": "index.js",
   "bin": {
@@ -39,17 +39,50 @@
   "standard-version": {
     "releaseCommitMessageFormat": "chore(release): {{currentTag}} 🚀",
     "types": [
-      { "type": "feat", "section": "✨ Features" },
-      { "type": "fix", "section": "🐛 Bug Fixes" },
-      { "type": "perf", "section": "⚡ Performance" },
-      { "type": "refactor", "section": "♻️ Refactors" },
-      { "type": "docs", "section": "📝 Documentation" },
-      { "type": "style", "section": "💄 Styles" },
-      { "type": "test", "section": "✅ Tests" },
-      { "type": "build", "section": "🏗️ Build System" },
-      { "type": "ci", "section": "👷 Continuous Integration" },
-      { "type": "chore", "section": "🧹 Chores" },
-      { "type": "revert", "section": "⏪ Reverts" }
+      {
+        "type": "feat",
+        "section": "✨ Features"
+      },
+      {
+        "type": "fix",
+        "section": "🐛 Bug Fixes"
+      },
+      {
+        "type": "perf",
+        "section": "⚡ Performance"
+      },
+      {
+        "type": "refactor",
+        "section": "♻️ Refactors"
+      },
+      {
+        "type": "docs",
+        "section": "📝 Documentation"
+      },
+      {
+        "type": "style",
+        "section": "💄 Styles"
+      },
+      {
+        "type": "test",
+        "section": "✅ Tests"
+      },
+      {
+        "type": "build",
+        "section": "🏗️ Build System"
+      },
+      {
+        "type": "ci",
+        "section": "👷 Continuous Integration"
+      },
+      {
+        "type": "chore",
+        "section": "🧹 Chores"
+      },
+      {
+        "type": "revert",
+        "section": "⏪ Reverts"
+      }
     ]
   },
   "devDependencies": {

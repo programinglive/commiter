@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/programinglive/commiter/compare/v1.0.0...v1.0.1) (2025-10-18)
+
+
+### 🐛 Bug Fixes
+
+* align commitlint config with project module type ([d051eac](https://github.com/programinglive/commiter/commit/d051eace5471d0c54fd8de6a3bede6a0df020dad))
+
 ## 1.0.0 (2025-10-17)
 
 
