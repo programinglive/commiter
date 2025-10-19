@@ -72,8 +72,14 @@ function setupCommiter() {
     const isEsmProject = packageJson.type === 'module';
     const commitlintConfigFile = isEsmProject ? 'commitlint.config.js' : 'commitlint.config.cjs';
     const commitlintConfigContent = isEsmProject
-      ? `export default { extends: ['@commitlint/config-conventional'] }\n`
-      : `module.exports = { extends: ['@commitlint/config-conventional'] }\n`;
+      ? `export default {
+  extends: ['@commitlint/config-conventional'],
+  ignores: [(message) => message.startsWith('chore(release):')]
+}\n`
+      : `module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  ignores: [(message) => message.startsWith('chore(release):')]
+}\n`;
 
     const legacyCommitlintConfigFile = isEsmProject ? 'commitlint.config.cjs' : 'commitlint.config.js';
     if (fs.existsSync(legacyCommitlintConfigFile)) {
