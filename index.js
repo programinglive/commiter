@@ -11,6 +11,14 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+function ensureSafeTestScript(scripts = {}) {
+  const defaultFailingTestScript = 'echo "Error: no test specified" && exit 1';
+  if (!scripts.test || scripts.test === defaultFailingTestScript) {
+    scripts.test = 'echo "No tests specified"';
+  }
+  return scripts;
+}
+
 function setupCommiter() {
   console.log('🚀 Setting up Commiter...\n');
 
@@ -31,8 +39,8 @@ function setupCommiter() {
     const packageJsonPath = path.join(process.cwd(), 'package.json');
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
 
+    packageJson.scripts = ensureSafeTestScript(packageJson.scripts || {});
     // Add scripts
-    packageJson.scripts = packageJson.scripts || {};
     packageJson.scripts.prepare = 'husky';
     packageJson.scripts.release = 'standard-version';
     packageJson.scripts['release:major'] = 'npm run release -- --release-as major';
@@ -112,4 +120,4 @@ if (require.main === module) {
   setupCommiter();
 }
 
-module.exports = { setupCommiter };
+module.exports = { setupCommiter, ensureSafeTestScript };

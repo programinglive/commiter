@@ -158,6 +158,8 @@ If this is your first release and you don't have a version tag yet:
 npm run release -- --first-release
 ```
 
+Running the setup command ensures the default `npm test` script is `echo "No tests specified"`, preventing the Husky `pre-commit` hook from failing during this initial release. Replace it with your real test command once available.
+
 ### Dry run
 
 To see what would happen without making changes:

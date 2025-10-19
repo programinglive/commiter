@@ -7,7 +7,7 @@
     "commiter": "./index.js"
   },
   "scripts": {
-    "test": "echo \"No tests specified\"",
+    "test": "node test/ensureSafeTestScript.test.js",
     "prepare": "husky",
     "release": "standard-version",
     "release:major": "npm run release -- --release-as major",
