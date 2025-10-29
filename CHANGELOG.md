@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.9](https://github.com/programinglive/commiter/compare/v1.0.8...v1.0.9) (2025-10-29)
+
+
+### ✨ Features
+
+* add new feature ([e1603c1](https://github.com/programinglive/commiter/commit/e1603c144823dd54f077de3f16c5c764d2066fe7))
+
 ### [1.0.8](https://github.com/programinglive/commiter/compare/v1.0.7...v1.0.8) (2025-10-29)
 
 
