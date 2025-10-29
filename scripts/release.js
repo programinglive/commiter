@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const { spawnSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
 
 const VALID_RELEASE_TYPES = new Set([
   'major',
@@ -13,6 +15,13 @@ const VALID_RELEASE_TYPES = new Set([
 ]);
 
 const SEMVER_REGEX = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
+
+const LOCKFILE_PREFERENCES = [
+  { manager: 'pnpm', file: 'pnpm-lock.yaml' },
+  { manager: 'yarn', file: 'yarn.lock' },
+  { manager: 'bun', file: 'bun.lockb' },
+  { manager: 'npm', file: 'package-lock.json' }
+];
 
 function getCliArguments(argv = process.argv) {
   const rawArgs = argv.slice(2);
@@ -61,6 +70,63 @@ function buildStandardVersionArgs({ releaseType, extraArgs }) {
   return args;
 }
 
+function loadPackageJson(cwd = process.cwd()) {
+  try {
+    const packageJsonPath = path.join(cwd, 'package.json');
+    const contents = fs.readFileSync(packageJsonPath, 'utf8');
+    return JSON.parse(contents);
+  } catch (error) {
+    return null;
+  }
+}
+
+function detectPackageManager({ env = process.env, cwd = process.cwd() } = {}) {
+  const userAgent = env.npm_config_user_agent || '';
+  if (userAgent.startsWith('pnpm/')) return 'pnpm';
+  if (userAgent.startsWith('yarn/')) return 'yarn';
+  if (userAgent.startsWith('bun/')) return 'bun';
+
+  for (const { manager, file } of LOCKFILE_PREFERENCES) {
+    if (fs.existsSync(path.join(cwd, file))) {
+      return manager;
+    }
+  }
+
+  return 'npm';
+}
+
+function buildTestCommand(packageManager) {
+  switch (packageManager) {
+    case 'pnpm':
+      return { command: 'pnpm', args: ['test'] };
+    case 'yarn':
+      return { command: 'yarn', args: ['test'] };
+    case 'bun':
+      return { command: 'bun', args: ['test'] };
+    default:
+      return { command: 'npm', args: ['test'] };
+  }
+}
+
+function runProjectTests({ spawn = spawnSync, env = process.env, cwd = process.cwd() } = {}) {
+  const packageJson = loadPackageJson(cwd);
+  const scripts = packageJson && packageJson.scripts ? packageJson.scripts : {};
+
+  if (!scripts.test) {
+    console.log('ℹ️  Skipping tests: no "test" script detected in package.json');
+    return { status: 0 };
+  }
+
+  const packageManager = detectPackageManager({ env, cwd });
+  const { command, args } = buildTestCommand(packageManager);
+
+  console.log(`🧪 Running tests with ${packageManager} ${args.join(' ')}`.trim());
+  return spawn(command, args, {
+    stdio: 'inherit',
+    env
+  });
+}
+
 function runRelease({ argv = process.argv, env = process.env, spawn = spawnSync } = {}) {
   const { releaseType: cliReleaseType, extraArgs } = getCliArguments(argv);
   const inferredReleaseType = cliReleaseType || getNpmRunArgument(env);
@@ -68,6 +134,11 @@ function runRelease({ argv = process.argv, env = process.env, spawn = spawnSync 
     releaseType: inferredReleaseType,
     extraArgs
   });
+
+  const testResult = runProjectTests({ spawn, env });
+  if (testResult && typeof testResult.status === 'number' && testResult.status !== 0) {
+    return testResult;
+  }
 
   const standardVersionBin = require.resolve('standard-version/bin/cli.js');
   return spawn(process.execPath, [standardVersionBin, ...standardVersionArgs], {
@@ -93,5 +164,8 @@ module.exports = {
   getCliArguments,
   getNpmRunArgument,
   buildStandardVersionArgs,
+  loadPackageJson,
+  detectPackageManager,
+  runProjectTests,
   runRelease
 };

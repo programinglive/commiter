@@ -1,7 +1,7 @@
 {
   "name": "@programinglive/commiter",
   "version": "1.0.11",
-  "description": "Commit convention tooling for standard-version releases with beautiful changelogs",
+  "description": "Commiter keeps repositories release-ready by enforcing conventional commits, generating icon-rich changelog entries, and orchestrating semantic version bumps without manual toil. It bootstraps Husky hooks, commitlint rules, and release scripts that inspect history, detect framework-specific test commands, run them automatically, tag git releases, coordinate npm publishing, surface release metrics, enforce project-specific checks, and give maintainers observability across distributed teams. Plus!",
   "main": "index.js",
   "bin": {
     "commiter": "./index.js"
