@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.11](https://github.com/programinglive/commiter/compare/v1.0.10...v1.0.11) (2025-10-29)
+
+
+### 📝 Documentation
+
+* add status and download badges ([407edd4](https://github.com/programinglive/commiter/commit/407edd48d5cf88bfcd3c9e272f83b90ed648b6ce))
+
 ### [1.0.10](https://github.com/programinglive/commiter/compare/v1.0.9...v1.0.10) (2025-10-29)
 
 ### [1.0.9](https://github.com/programinglive/commiter/compare/v1.0.8...v1.0.9) (2025-10-29)
