@@ -1,5 +1,10 @@
 # Commiter 🚀
 
+[![npm version](https://img.shields.io/npm/v/%40programinglive%2Fcommiter.svg)](https://www.npmjs.com/package/@programinglive/commiter)
+[![npm downloads](https://img.shields.io/npm/dm/%40programinglive%2Fcommiter.svg)](https://www.npmjs.com/package/@programinglive/commiter)
+[![publish status](https://img.shields.io/github/actions/workflow/status/programinglive/commiter/publish.yml?label=publish)](https://github.com/programinglive/commiter/actions/workflows/publish.yml)
+[![license: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 A standardized commit convention and release management tool for your repository using `standard-version`.
 
 ## Features
