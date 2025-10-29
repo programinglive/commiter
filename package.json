@@ -9,10 +9,10 @@
   "scripts": {
     "test": "node test/ensureSafeTestScript.test.js",
     "prepare": "husky",
-    "release": "standard-version",
-    "release:major": "npm run release -- --release-as major",
-    "release:minor": "npm run release -- --release-as minor",
-    "release:patch": "npm run release -- --release-as patch"
+    "release": "node scripts/release.js",
+    "release:major": "node scripts/release.js major",
+    "release:minor": "node scripts/release.js minor",
+    "release:patch": "node scripts/release.js patch"
   },
   "keywords": [
     "commit",
