@@ -72,6 +72,7 @@ npm publish
 
 ## Automated Release Workflow
 
+### Option 1: Manual Publishing (Traditional)
 1. Make changes and commit using conventional commits
 2. Run the appropriate release command
 3. Push to GitHub with tags
@@ -92,6 +93,31 @@ git push --follow-tags origin main
 # Publish to npm
 npm publish
 ```
+
+### Option 2: Automated Publishing (Recommended)
+1. Make changes and commit using conventional commits
+2. Run the appropriate release command
+3. Push to GitHub with tags - **npm publishing happens automatically**
+
+Example:
+```bash
+# Make changes
+git add .
+git commit -m "feat(cli): add interactive setup wizard"
+
+# Create release
+npm run release:minor
+
+# Push to GitHub (triggers automatic npm publish)
+git push --follow-tags origin main
+```
+
+**Setup Required for Automated Publishing:**
+1. Add `NPM_TOKEN` secret to your GitHub repository
+2. The GitHub Actions workflow (`.github/workflows/publish.yml`) will automatically:
+   - Run tests
+   - Publish to npm when a tag starting with `v` is pushed
+   - Use the `--access public` flag for scoped packages
 
 ## Unpublishing (Emergency Only)
 
