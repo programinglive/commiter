@@ -116,11 +116,12 @@ npm run release
 
 ## What Happens During Release?
 
-1. 📊 Analyzes commits since last release
-2. 🔢 Bumps version in `package.json`
-3. 📝 Updates `CHANGELOG.md` with icons
-4. 🏷️ Creates a git tag
-5. 💾 Commits changes with format: `chore(release): v1.2.3 🚀`
+1. 🧪 Detects your package manager and runs the `test` script automatically
+2. 📊 Analyzes commits since last release
+3. 🔢 Bumps version in `package.json`
+4. 📝 Updates `CHANGELOG.md` with icons
+5. 🏷️ Creates a git tag
+6. 💾 Commits changes with format: `chore(release): v1.2.3 🚀`
 
 ## Push Your Release
 
