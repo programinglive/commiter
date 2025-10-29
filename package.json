@@ -1,6 +1,6 @@
 {
   "name": "@programinglive/commiter",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Commit convention tooling for standard-version releases with beautiful changelogs",
   "main": "index.js",
   "bin": {
