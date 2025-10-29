@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.12](https://github.com/programinglive/commiter/compare/v1.0.11...v1.0.12) (2025-10-29)
+
+
+### ✨ Features
+
+* auto-detect test command during release ([602e30e](https://github.com/programinglive/commiter/commit/602e30e94ff7c58b35f8c54bd495c0334352c72c))
+
 ### [1.0.11](https://github.com/programinglive/commiter/compare/v1.0.10...v1.0.11) (2025-10-29)
 
 
