@@ -4,6 +4,7 @@ const {
   getCliArguments,
   getNpmRunArgument,
   buildStandardVersionArgs,
+  runRelease,
   VALID_RELEASE_TYPES,
   SEMVER_REGEX
 } = require('../scripts/release');
@@ -73,4 +74,53 @@ test('SEMVER_REGEX matches standard versions', () => {
   assert.ok(SEMVER_REGEX.test('1.0.0'));
   assert.ok(SEMVER_REGEX.test('2.3.4-beta.1'));
   assert.ok(!SEMVER_REGEX.test('not-a-version'));
+});
+
+test('runRelease infers release type from argv', () => {
+  const calls = [];
+  const spawn = (...args) => {
+    calls.push(args);
+    return { status: 0 };
+  };
+
+  runRelease({
+    argv: [...DEFAULT_ARGV, 'minor'],
+    env: {},
+    spawn
+  });
+
+  assert.strictEqual(calls.length, 1);
+  const [execPath, [bin, ...args]] = calls[0];
+  assert.strictEqual(execPath, process.execPath);
+  assert.strictEqual(bin, require.resolve('standard-version/bin/cli.js'));
+  assert.deepStrictEqual(args, ['--release-as', 'minor']);
+});
+
+test('runRelease uses npm argv when CLI type absent', () => {
+  let spawnArgs;
+  const spawn = (...args) => {
+    spawnArgs = args;
+    return { status: 0 };
+  };
+
+  runRelease({
+    argv: DEFAULT_ARGV,
+    env: {
+      npm_config_argv: JSON.stringify({ original: ['run', 'release', 'patch'] })
+    },
+    spawn
+  });
+
+  const [, [, ...args]] = spawnArgs;
+  assert.deepStrictEqual(args, ['--release-as', 'patch']);
+});
+
+test('runRelease throws on invalid release type', () => {
+  assert.throws(() => {
+    runRelease({
+      argv: [...DEFAULT_ARGV, 'invalid'],
+      env: {},
+      spawn: () => ({ status: 0 })
+    });
+  }, /Unknown release type/);
 });
