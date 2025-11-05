@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/programinglive/commiter/compare/v1.1.0...v1.1.1) (2025-11-05)
+
+
+### 🐛 Bug Fixes
+
+* remove fs.F_OK deprecation warning ([1b0652b](https://github.com/programinglive/commiter/commit/1b0652b88d1b095e1045994948f75ce8194f9d3a))
+
 ## [1.1.0](https://github.com/programinglive/commiter/compare/v1.0.12...v1.1.0) (2025-10-29)
 
 
