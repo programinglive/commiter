@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.3](https://github.com/programinglive/commiter/compare/v1.1.2...v1.1.3) (2025-11-05)
+
+### [1.1.2](https://github.com/programinglive/commiter/compare/v1.1.1...v1.1.2) (2025-11-05)
+
+
+### 🧹 Chores
+
+* auto-update release notes during release ([99d1043](https://github.com/programinglive/commiter/commit/99d104374794a6a46dc34e8a91fa8b30ae9b297b))
+
 ### [1.1.1](https://github.com/programinglive/commiter/compare/v1.1.0...v1.1.1) (2025-11-05)
 
 

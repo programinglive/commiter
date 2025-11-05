@@ -4,6 +4,8 @@ const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+const { updateReleaseNotes } = require('./update-release-notes');
+
 const fsFokPreloadPath = path.join(__dirname, 'preload', 'fs-f-ok.cjs');
 const FS_FOK_PRELOAD_FLAG = buildPreloadFlag(fsFokPreloadPath);
 
@@ -132,13 +134,25 @@ function runProjectTests({ spawn = spawnSync, env = process.env, cwd = process.c
   });
 }
 
-function runRelease({ argv = process.argv, env = process.env, spawn = spawnSync } = {}) {
+function runRelease({
+  argv = process.argv,
+  env = process.env,
+  spawn = spawnSync,
+  cwd = process.cwd(),
+  dependencies = {}
+} = {}) {
   const { releaseType: cliReleaseType, extraArgs } = getCliArguments(argv);
   const inferredReleaseType = cliReleaseType || getNpmRunArgument(env);
   const standardVersionArgs = buildStandardVersionArgs({
     releaseType: inferredReleaseType,
     extraArgs
   });
+
+  const checkWorkingTreeClean = dependencies.isWorkingTreeClean || (() => isWorkingTreeClean({ cwd }));
+  const workingTreeClean = checkWorkingTreeClean();
+  if (!workingTreeClean) {
+    throw new Error('Working tree has uncommitted changes. Commit or stash before running release.');
+  }
 
   const testResult = runProjectTests({ spawn, env });
   if (testResult && typeof testResult.status === 'number' && testResult.status !== 0) {
@@ -147,10 +161,76 @@ function runRelease({ argv = process.argv, env = process.env, spawn = spawnSync 
 
   const standardVersionBin = require.resolve('standard-version/bin/cli.js');
   const childEnv = appendPreloadToNodeOptions(env, FS_FOK_PRELOAD_FLAG);
-  return spawn(process.execPath, [standardVersionBin, ...standardVersionArgs], {
+  const releaseResult = spawn(process.execPath, [standardVersionBin, ...standardVersionArgs], {
     stdio: 'inherit',
-    env: childEnv
+    env: childEnv,
+    cwd
   });
+
+  if (releaseResult && typeof releaseResult.status === 'number' && releaseResult.status !== 0) {
+    return releaseResult;
+  }
+
+  const releaseNotesPath = dependencies.releaseNotesPath || path.join('docs', 'release-notes', 'RELEASE_NOTES.md');
+  const updateNotes = dependencies.updateReleaseNotes || ((options = {}) => updateReleaseNotes({ rootDir: cwd, ...options }));
+  const gitAdd = dependencies.gitAdd || ((files) => spawnSync('git', ['add', ...files], { stdio: 'inherit', cwd }));
+  const gitCommitAmend = dependencies.gitCommitAmend || (() => spawnSync('git', ['commit', '--amend', '--no-edit'], { stdio: 'inherit', cwd }));
+  const gitTag = dependencies.gitTag || ((tagName, tagMessage) => {
+    const args = tagMessage
+      ? ['tag', '-f', '-a', tagName, '-m', tagMessage]
+      : ['tag', '-f', tagName];
+    return spawnSync('git', args, { stdio: 'inherit', cwd });
+  });
+  const getCommitMessage = dependencies.getCommitMessage || (() => spawnSync('git', ['log', '-1', '--pretty=%s'], { cwd, encoding: 'utf8' }));
+  const buildTagName = dependencies.buildTagName || ((version) => `v${version}`);
+  const loadPackage = dependencies.loadPackageJson || ((dir) => loadPackageJson(dir));
+
+  let notesUpdated = false;
+  try {
+    notesUpdated = updateNotes();
+  } catch (error) {
+    console.warn(`⚠️  Skipping release notes update: ${error.message}`);
+  }
+
+  if (notesUpdated) {
+    const gitAddResult = gitAdd([releaseNotesPath]);
+    if (!gitAddResult || typeof gitAddResult.status !== 'number' || gitAddResult.status !== 0) {
+      console.warn('⚠️  Release notes updated but failed to stage changes. Please add them manually.');
+      return releaseResult;
+    }
+
+    const gitCommitResult = gitCommitAmend();
+    if (!gitCommitResult || typeof gitCommitResult.status !== 'number' || gitCommitResult.status !== 0) {
+      console.warn('⚠️  Release notes updated but failed to amend release commit. Please amend manually.');
+      return releaseResult;
+    }
+
+    const packageJson = loadPackage(cwd);
+    const version = packageJson && packageJson.version;
+    if (!version) {
+      console.warn('⚠️  Cannot retag release: package.json version missing. Please update tag manually.');
+      return releaseResult;
+    }
+
+    const tagName = buildTagName(version);
+    let tagMessage;
+    try {
+      const commitMessageResult = getCommitMessage();
+      if (commitMessageResult && typeof commitMessageResult.status === 'number' && commitMessageResult.status === 0) {
+        const output = typeof commitMessageResult.stdout === 'string' ? commitMessageResult.stdout : '';
+        tagMessage = output.trim();
+      }
+    } catch (error) {
+      console.warn(`⚠️  Unable to read release commit message: ${error.message}`);
+    }
+
+    const gitTagResult = gitTag(tagName, tagMessage);
+    if (!gitTagResult || typeof gitTagResult.status !== 'number' || gitTagResult.status !== 0) {
+      console.warn(`⚠️  Failed to retag ${tagName}. Please update the tag manually before pushing.`);
+    }
+  }
+
+  return releaseResult;
 }
 
 if (require.main === module) {
@@ -174,7 +254,8 @@ module.exports = {
   loadPackageJson,
   detectPackageManager,
   runProjectTests,
-  runRelease
+  runRelease,
+  isWorkingTreeClean
 };
 
 function buildPreloadFlag(filePath) {
@@ -190,4 +271,24 @@ function appendPreloadToNodeOptions(env, preloadFlag) {
   const existing = typeof nextEnv.NODE_OPTIONS === 'string' ? nextEnv.NODE_OPTIONS.trim() : '';
   nextEnv.NODE_OPTIONS = existing ? `${existing} ${preloadFlag}` : preloadFlag;
   return nextEnv;
+}
+
+function isWorkingTreeClean({ cwd = process.cwd() } = {}) {
+  const result = spawnSync('git', ['status', '--porcelain'], {
+    cwd,
+    encoding: 'utf8'
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  if (typeof result.status === 'number' && result.status !== 0) {
+    const stderr = typeof result.stderr === 'string' ? result.stderr.trim() : '';
+    const message = stderr || 'Failed to determine working tree status.';
+    throw new Error(message);
+  }
+
+  const output = typeof result.stdout === 'string' ? result.stdout : '';
+  return output.trim().length === 0;
 }

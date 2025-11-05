@@ -4,6 +4,9 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.3 | 2025-11-05 | See CHANGELOG for details. |
+| 1.1.2 | 2025-11-05 | auto-update release notes during release (99d1043) |
+| 1.1.1 | 2025-11-05 | 🐛 Bug Fix – removed the fs.F_OK deprecation warning from release runs. |
 | 1.1.0 | 2025-10-29 | 📝 Documentation – clarified release automation flow. |
 | 1.0.12 | 2025-10-29 | ✨ Feature – autodetects project test command before releasing. |
 | 1.0.11 | 2025-10-29 | 📝 Documentation – added project status and download badges. |
@@ -19,7 +22,23 @@ This document summarizes every published version of `@programinglive/commiter`. 
 | 1.0.1 | 2025-10-18 | 🐛 Bug Fix – aligned commitlint config with project module type. |
 | 1.0.0 | 2025-10-17 | ✨ Initial release – bootstrapped conventional release tooling; added community docs and metadata. |
 
-## fs.F_OK Deprecation Warning Fix (Unreleased)
+
+
+## 1.1.3
+
+Released on **2025-11-05**.
+
+- See CHANGELOG for details.
+
+## 1.1.2 – 🧹 Chores
+
+Released on **2025-11-05**.
+
+- auto-update release notes during release (99d1043)
+
+## 1.1.1 – fs.F_OK Deprecation Warning Fix
+
+Released on **2025-11-05**.
 - Eliminated the `[DEP0176] fs.F_OK` warning emitted during release commands by injecting a preload script that transparently rewrites `fs.F_OK` usage inside `standard-version`.
 - Ensured the preload script runs for both in-process unit tests and the child process that executes `standard-version` by appending a `--require` flag to `NODE_OPTIONS`.
 - Updated the test suite to cover the preload behaviour and the adjusted release workflow, switching the project to Node’s built-in test runner (`node --test`).

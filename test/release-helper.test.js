@@ -1,5 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert');
+const path = require('node:path');
 const {
   getCliArguments,
   getNpmRunArgument,
@@ -86,7 +87,10 @@ test('runRelease infers release type from argv', () => {
   runRelease({
     argv: [...DEFAULT_ARGV, 'minor'],
     env: {},
-    spawn
+    spawn,
+    dependencies: {
+      isWorkingTreeClean: () => true
+    }
   });
 
   assert.strictEqual(calls.length, 2);
@@ -101,6 +105,62 @@ test('runRelease infers release type from argv', () => {
   assert.deepStrictEqual(args, ['--release-as', 'minor']);
 });
 
+test('runRelease amends release commit when release notes update succeeds', () => {
+  const calls = [];
+  const spawn = (...args) => {
+    calls.push(args);
+    return { status: 0 };
+  };
+
+  let gitAddArgs;
+  let gitCommitAmendCalled = false;
+  let gitTagArgs;
+
+  const result = runRelease({
+    argv: [...DEFAULT_ARGV, 'patch'],
+    env: {},
+    spawn,
+    dependencies: {
+      updateReleaseNotes: () => true,
+      gitAdd: (files) => {
+        gitAddArgs = files;
+        return { status: 0 };
+      },
+      gitCommitAmend: () => {
+        gitCommitAmendCalled = true;
+        return { status: 0 };
+      },
+      loadPackageJson: () => ({ version: '1.2.3' }),
+      buildTagName: (version) => `v${version}`,
+      getCommitMessage: () => ({ status: 0, stdout: 'chore(release): v1.2.3 🚀' }),
+      gitTag: (...args) => {
+        gitTagArgs = args;
+        return { status: 0 };
+      },
+      isWorkingTreeClean: () => true
+    }
+  });
+
+  assert.ok(result);
+  assert.strictEqual(result.status, 0);
+  assert.deepStrictEqual(gitAddArgs, [path.join('docs', 'release-notes', 'RELEASE_NOTES.md')]);
+  assert.ok(gitCommitAmendCalled);
+  assert.deepStrictEqual(gitTagArgs, ['v1.2.3', 'chore(release): v1.2.3 🚀']);
+  assert.strictEqual(calls.length, 2);
+});
+
+test('runRelease throws if working tree is dirty', () => {
+  assert.throws(() => {
+    runRelease({
+      argv: DEFAULT_ARGV,
+      env: {},
+      dependencies: {
+        isWorkingTreeClean: () => false
+      }
+    });
+  }, /working tree has uncommitted changes/i);
+});
+
 test('runRelease uses npm argv when CLI type absent', () => {
   let spawnArgs;
   const spawn = (...args) => {
@@ -113,7 +173,10 @@ test('runRelease uses npm argv when CLI type absent', () => {
     env: {
       npm_config_argv: JSON.stringify({ original: ['run', 'release', 'patch'] })
     },
-    spawn
+    spawn,
+    dependencies: {
+      isWorkingTreeClean: () => true
+    }
   });
 
   const [, [, ...args]] = spawnArgs;
@@ -125,7 +188,10 @@ test('runRelease throws on invalid release type', () => {
     runRelease({
       argv: [...DEFAULT_ARGV, 'invalid'],
       env: {},
-      spawn: () => ({ status: 0 })
+      spawn: () => ({ status: 0 }),
+      dependencies: {
+        isWorkingTreeClean: () => true
+      }
     });
   }, /Unknown release type/);
 });
