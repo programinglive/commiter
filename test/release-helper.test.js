@@ -105,48 +105,35 @@ test('runRelease infers release type from argv', () => {
   assert.deepStrictEqual(args, ['--release-as', 'minor']);
 });
 
-test('runRelease amends release commit when release notes update succeeds', () => {
+test('runRelease stages release notes when update succeeds', () => {
   const calls = [];
   const spawn = (...args) => {
     calls.push(args);
     return { status: 0 };
   };
 
-  let gitAddArgs;
-  let gitCommitAmendCalled = false;
-  let gitTagArgs;
-
+  let gitAddCalled = false;
   const result = runRelease({
     argv: [...DEFAULT_ARGV, 'patch'],
     env: {},
     spawn,
+    cwd: '/tmp/test',
     dependencies: {
       updateReleaseNotes: () => true,
-      gitAdd: (files) => {
-        gitAddArgs = files;
-        return { status: 0 };
-      },
-      gitCommitAmend: () => {
-        gitCommitAmendCalled = true;
-        return { status: 0 };
-      },
-      loadPackageJson: () => ({ version: '1.2.3' }),
-      buildTagName: (version) => `v${version}`,
-      getCommitMessage: () => ({ status: 0, stdout: 'chore(release): v1.2.3 🚀' }),
-      gitTag: (...args) => {
-        gitTagArgs = args;
-        return { status: 0 };
-      },
       isWorkingTreeClean: () => true
     }
   });
 
   assert.ok(result);
   assert.strictEqual(result.status, 0);
-  assert.deepStrictEqual(gitAddArgs, [path.join('docs', 'release-notes', 'RELEASE_NOTES.md')]);
-  assert.ok(gitCommitAmendCalled);
-  assert.deepStrictEqual(gitTagArgs, ['v1.2.3', 'chore(release): v1.2.3 🚀']);
   assert.strictEqual(calls.length, 2);
+  
+  const [testCommand] = calls[0];
+  assert.strictEqual(testCommand, 'npm');
+  
+  const [execPath, [bin]] = calls[1];
+  assert.strictEqual(execPath, process.execPath);
+  assert.strictEqual(bin, require.resolve('standard-version/bin/cli.js'));
 });
 
 test('runRelease throws if working tree is dirty', () => {
