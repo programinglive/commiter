@@ -173,6 +173,17 @@ function runRelease({
 
   const releaseNotesPath = dependencies.releaseNotesPath || path.join('docs', 'release-notes', 'RELEASE_NOTES.md');
   const updateNotes = dependencies.updateReleaseNotes || ((options = {}) => updateReleaseNotes({ rootDir: cwd, ...options }));
+  const gitAdd = dependencies.gitAdd || ((files) => spawnSync('git', ['add', ...files], { stdio: 'inherit', cwd }));
+  const gitCommitAmend = dependencies.gitCommitAmend || (() => spawnSync('git', ['commit', '--amend', '--no-edit'], { stdio: 'inherit', cwd }));
+  const gitTag = dependencies.gitTag || ((tagName, tagMessage) => {
+    const args = tagMessage
+      ? ['tag', '-f', '-a', tagName, '-m', tagMessage]
+      : ['tag', '-f', tagName];
+    return spawnSync('git', args, { stdio: 'inherit', cwd });
+  });
+  const getCommitMessage = dependencies.getCommitMessage || (() => spawnSync('git', ['log', '-1', '--pretty=%s'], { cwd, encoding: 'utf8' }));
+  const buildTagName = dependencies.buildTagName || ((version) => `v${version}`);
+  const loadPackage = dependencies.loadPackageJson || ((dir) => loadPackageJson(dir));
 
   let notesUpdated = false;
   try {
@@ -182,9 +193,40 @@ function runRelease({
   }
 
   if (notesUpdated) {
-    const gitAddResult = spawnSync('git', ['add', releaseNotesPath], { stdio: 'inherit', cwd });
+    const gitAddResult = gitAdd([releaseNotesPath]);
     if (!gitAddResult || typeof gitAddResult.status !== 'number' || gitAddResult.status !== 0) {
-      console.warn('⚠️  Release notes updated but failed to stage. Please add manually: git add ' + releaseNotesPath);
+      console.warn('⚠️  Release notes updated but failed to stage changes. Please add them manually.');
+      return releaseResult;
+    }
+
+    const gitCommitResult = gitCommitAmend();
+    if (!gitCommitResult || typeof gitCommitResult.status !== 'number' || gitCommitResult.status !== 0) {
+      console.warn('⚠️  Release notes updated but failed to amend release commit. Please amend manually.');
+      return releaseResult;
+    }
+
+    const packageJson = loadPackage(cwd);
+    const version = packageJson && packageJson.version;
+    if (!version) {
+      console.warn('⚠️  Cannot retag release: package.json version missing. Please update tag manually.');
+      return releaseResult;
+    }
+
+    const tagName = buildTagName(version);
+    let tagMessage;
+    try {
+      const commitMessageResult = getCommitMessage();
+      if (commitMessageResult && typeof commitMessageResult.status === 'number' && commitMessageResult.status === 0) {
+        const output = typeof commitMessageResult.stdout === 'string' ? commitMessageResult.stdout : '';
+        tagMessage = output.trim();
+      }
+    } catch (error) {
+      console.warn(`⚠️  Unable to read release commit message: ${error.message}`);
+    }
+
+    const gitTagResult = gitTag(tagName, tagMessage);
+    if (!gitTagResult || typeof gitTagResult.status === 'number' && gitTagResult.status !== 0) {
+      console.warn(`⚠️  Failed to retag ${tagName}. Please update the tag manually before pushing.`);
     }
   }
 
