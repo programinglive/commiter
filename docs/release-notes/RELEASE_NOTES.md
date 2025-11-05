@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.4 | 2025-11-05 | simplify release notes staging to avoid git ref conflicts (d4077aa) |
 | 1.1.3 | 2025-11-05 | See CHANGELOG for details. |
 | 1.1.2 | 2025-11-05 | auto-update release notes during release (99d1043) |
 | 1.1.1 | 2025-11-05 | 🐛 Bug Fix – removed the fs.F_OK deprecation warning from release runs. |
@@ -23,6 +24,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 | 1.0.0 | 2025-10-17 | ✨ Initial release – bootstrapped conventional release tooling; added community docs and metadata. |
 
 
+
+
+## 1.1.4 – 🐛 Bug Fixes
+
+Released on **2025-11-05**.
+
+- simplify release notes staging to avoid git ref conflicts (d4077aa)
 
 ## 1.1.3
 
