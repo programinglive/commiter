@@ -4,6 +4,11 @@ const { spawnSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+const fsFokPreloadPath = path.join(__dirname, 'preload', 'fs-f-ok.cjs');
+const FS_FOK_PRELOAD_FLAG = buildPreloadFlag(fsFokPreloadPath);
+
+require('./preload/fs-f-ok.cjs');
+
 const VALID_RELEASE_TYPES = new Set([
   'major',
   'minor',
@@ -141,8 +146,10 @@ function runRelease({ argv = process.argv, env = process.env, spawn = spawnSync 
   }
 
   const standardVersionBin = require.resolve('standard-version/bin/cli.js');
+  const childEnv = appendPreloadToNodeOptions(env, FS_FOK_PRELOAD_FLAG);
   return spawn(process.execPath, [standardVersionBin, ...standardVersionArgs], {
-    stdio: 'inherit'
+    stdio: 'inherit',
+    env: childEnv
   });
 }
 
@@ -169,3 +176,18 @@ module.exports = {
   runProjectTests,
   runRelease
 };
+
+function buildPreloadFlag(filePath) {
+  const resolved = path.resolve(filePath);
+  const escaped = resolved.includes(' ')
+    ? `"${resolved.replace(/"/g, '\"')}"`
+    : resolved;
+  return `--require ${escaped}`;
+}
+
+function appendPreloadToNodeOptions(env, preloadFlag) {
+  const nextEnv = { ...env };
+  const existing = typeof nextEnv.NODE_OPTIONS === 'string' ? nextEnv.NODE_OPTIONS.trim() : '';
+  nextEnv.NODE_OPTIONS = existing ? `${existing} ${preloadFlag}` : preloadFlag;
+  return nextEnv;
+}

@@ -89,8 +89,13 @@ test('runRelease infers release type from argv', () => {
     spawn
   });
 
-  assert.strictEqual(calls.length, 1);
-  const [execPath, [bin, ...args]] = calls[0];
+  assert.strictEqual(calls.length, 2);
+
+  const [testCommand, testArgs] = calls[0];
+  assert.strictEqual(testCommand, 'npm');
+  assert.deepStrictEqual(testArgs, ['test']);
+
+  const [execPath, [bin, ...args]] = calls[1];
   assert.strictEqual(execPath, process.execPath);
   assert.strictEqual(bin, require.resolve('standard-version/bin/cli.js'));
   assert.deepStrictEqual(args, ['--release-as', 'minor']);
