@@ -32,6 +32,16 @@ npx @programinglive/commiter
 
 After installation in your project, the Husky hooks will be automatically set up for commit message validation.
 
+### Recommended MCP workflow companion
+
+For a guided end-to-end engineering workflow, install the [Development Workflow MCP Server](https://github.com/programinglive/dev-workflow-mcp-server) alongside Commiter:
+
+```bash
+npm install --save-dev @programinglive/dev-workflow-mcp-server
+```
+
+Follow the configuration steps in that repository's README to connect your IDE assistant and automate the standard development workflow (start task → implement → test → document → commit → release).
+
 ## Commit Message Format
 
 All commits must follow the [Conventional Commits](https://www.conventionalcommits.org/) specification:
