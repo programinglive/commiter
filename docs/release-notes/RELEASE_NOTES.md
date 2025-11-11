@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.7 | 2025-11-11 | recommend dev workflow mcp server (58a5054) |
 | 1.1.6 | 2025-11-05 | revert to simple release notes staging to avoid git ref conflicts (2f6a40e) |
 | 1.1.5 | 2025-11-05 | include release notes in release commit via amendment (3f2afa8) |
 | 1.1.4 | 2025-11-05 | simplify release notes staging to avoid git ref conflicts (d4077aa) |
@@ -29,6 +30,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.1.7 – 📝 Documentation
+
+Released on **2025-11-11**.
+
+- recommend dev workflow mcp server (58a5054)
 
 ## 1.1.6 – 🐛 Bug Fixes
 

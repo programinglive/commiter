@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.7](https://github.com/programinglive/commiter/compare/v1.1.6...v1.1.7) (2025-11-11)
+
+
+### 📝 Documentation
+
+* recommend dev workflow mcp server ([58a5054](https://github.com/programinglive/commiter/commit/58a5054fafd627ef23c448fd93b1383518590ad2))
+
 ### [1.1.6](https://github.com/programinglive/commiter/compare/v1.1.5...v1.1.6) (2025-11-05)
 
 
