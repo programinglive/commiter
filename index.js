@@ -19,6 +19,23 @@ function ensureSafeTestScript(scripts = {}) {
   return scripts;
 }
 
+function copyRecursiveSync(src, dest) {
+  const exists = fs.existsSync(src);
+  const stats = exists && fs.statSync(src);
+  const isDirectory = exists && stats.isDirectory();
+
+  if (isDirectory) {
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest);
+    }
+    fs.readdirSync(src).forEach((childItemName) => {
+      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+    });
+  } else {
+    fs.copyFileSync(src, dest);
+  }
+}
+
 function setupCommiter() {
   console.log('🚀 Setting up Commiter...\n');
 
@@ -77,9 +94,21 @@ function setupCommiter() {
 
     const releaseScriptPath = path.join(releaseScriptDir, 'release.js');
     const releaseScriptSource = path.join(__dirname, 'scripts', 'release.js');
-    const releaseScriptContent = fs.readFileSync(releaseScriptSource, 'utf8');
+    fs.copyFileSync(releaseScriptSource, releaseScriptPath);
 
-    fs.writeFileSync(releaseScriptPath, releaseScriptContent + '\n');
+    // Copy update-release-notes.js
+    const updateNotesSource = path.join(__dirname, 'scripts', 'update-release-notes.js');
+    const updateNotesDest = path.join(releaseScriptDir, 'update-release-notes.js');
+    if (fs.existsSync(updateNotesSource)) {
+        fs.copyFileSync(updateNotesSource, updateNotesDest);
+    }
+
+    // Copy preload directory
+    const preloadSource = path.join(__dirname, 'scripts', 'preload');
+    const preloadDest = path.join(releaseScriptDir, 'preload');
+    if (fs.existsSync(preloadSource)) {
+        copyRecursiveSync(preloadSource, preloadDest);
+    }
     try {
       fs.chmodSync(releaseScriptPath, 0o755);
     } catch (error) {
@@ -123,6 +152,18 @@ npx --no -- commitlint --edit "$1"
 `;
     fs.writeFileSync(path.join(huskyDir, 'commit-msg'), commitMsgHook);
     fs.chmodSync(path.join(huskyDir, 'commit-msg'), 0o755);
+
+    // Update .gitignore
+    const gitignorePath = path.join(process.cwd(), '.gitignore');
+    let gitignoreContent = '';
+    if (fs.existsSync(gitignorePath)) {
+      gitignoreContent = fs.readFileSync(gitignorePath, 'utf8');
+    }
+
+    if (!gitignoreContent.includes('node_modules')) {
+      console.log('📝 Updating .gitignore...');
+      fs.appendFileSync(gitignorePath, '\nnode_modules\n');
+    }
 
     console.log('\n✅ Commiter setup complete!\n');
     console.log('📚 Available commands:');
