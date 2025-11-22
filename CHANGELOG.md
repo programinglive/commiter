@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.8](https://github.com/programinglive/commiter/compare/v1.1.7...v1.1.8) (2025-11-22)
+
+
+### 🐛 Bug Fixes
+
+* update installation script to copy missing files and update gitignore ([5d56259](https://github.com/programinglive/commiter/commit/5d562592fe35b684fa12bd89748b24551ae28a66))
+
 ### [1.1.7](https://github.com/programinglive/commiter/compare/v1.1.6...v1.1.7) (2025-11-11)
 
 
