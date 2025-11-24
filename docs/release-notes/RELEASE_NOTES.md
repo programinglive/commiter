@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.9 | 2025-11-24 | convert release scripts to CJS to support ESM projects (842da02) |
 | 1.1.8 | 2025-11-22 | update installation script to copy missing files and update gitignore (5d56259) |
 | 1.1.7 | 2025-11-11 | recommend dev workflow mcp server (58a5054) |
 | 1.1.6 | 2025-11-05 | revert to simple release notes staging to avoid git ref conflicts (2f6a40e) |
@@ -33,6 +34,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.1.9 – 🐛 Bug Fixes
+
+Released on **2025-11-24**.
+
+- convert release scripts to CJS to support ESM projects (842da02)
 
 ## 1.1.8 – 🐛 Bug Fixes
 

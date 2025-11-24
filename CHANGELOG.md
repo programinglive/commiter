@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.9](https://github.com/programinglive/commiter/compare/v1.1.8...v1.1.9) (2025-11-24)
+
+
+### 🐛 Bug Fixes
+
+* convert release scripts to CJS to support ESM projects ([842da02](https://github.com/programinglive/commiter/commit/842da0298f1c4df7aa93b43ca8698e3669ef6450))
+
 ### [1.1.8](https://github.com/programinglive/commiter/compare/v1.1.7...v1.1.8) (2025-11-22)
 
 
