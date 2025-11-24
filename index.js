@@ -59,10 +59,10 @@ function setupCommiter() {
     packageJson.scripts = ensureSafeTestScript(packageJson.scripts || {});
     // Add scripts
     packageJson.scripts.prepare = 'husky';
-    packageJson.scripts.release = 'node scripts/release.js';
-    packageJson.scripts['release:major'] = 'node scripts/release.js major';
-    packageJson.scripts['release:minor'] = 'node scripts/release.js minor';
-    packageJson.scripts['release:patch'] = 'node scripts/release.js patch';
+    packageJson.scripts.release = 'node scripts/release.cjs';
+    packageJson.scripts['release:major'] = 'node scripts/release.cjs major';
+    packageJson.scripts['release:minor'] = 'node scripts/release.cjs minor';
+    packageJson.scripts['release:patch'] = 'node scripts/release.cjs patch';
 
     // Add standard-version config
     packageJson['standard-version'] = {
@@ -92,22 +92,22 @@ function setupCommiter() {
       fs.mkdirSync(releaseScriptDir, { recursive: true });
     }
 
-    const releaseScriptPath = path.join(releaseScriptDir, 'release.js');
-    const releaseScriptSource = path.join(__dirname, 'scripts', 'release.js');
+    const releaseScriptPath = path.join(releaseScriptDir, 'release.cjs');
+    const releaseScriptSource = path.join(__dirname, 'scripts', 'release.cjs');
     fs.copyFileSync(releaseScriptSource, releaseScriptPath);
 
     // Copy update-release-notes.js
-    const updateNotesSource = path.join(__dirname, 'scripts', 'update-release-notes.js');
-    const updateNotesDest = path.join(releaseScriptDir, 'update-release-notes.js');
+    const updateNotesSource = path.join(__dirname, 'scripts', 'update-release-notes.cjs');
+    const updateNotesDest = path.join(releaseScriptDir, 'update-release-notes.cjs');
     if (fs.existsSync(updateNotesSource)) {
-        fs.copyFileSync(updateNotesSource, updateNotesDest);
+      fs.copyFileSync(updateNotesSource, updateNotesDest);
     }
 
     // Copy preload directory
     const preloadSource = path.join(__dirname, 'scripts', 'preload');
     const preloadDest = path.join(releaseScriptDir, 'preload');
     if (fs.existsSync(preloadSource)) {
-        copyRecursiveSync(preloadSource, preloadDest);
+      copyRecursiveSync(preloadSource, preloadDest);
     }
     try {
       fs.chmodSync(releaseScriptPath, 0o755);

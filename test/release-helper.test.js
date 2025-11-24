@@ -8,9 +8,9 @@ const {
   runRelease,
   VALID_RELEASE_TYPES,
   SEMVER_REGEX
-} = require('../scripts/release');
+} = require('../scripts/release.cjs');
 
-const DEFAULT_ARGV = ['node', 'scripts/release.js'];
+const DEFAULT_ARGV = ['node', 'scripts/release.cjs'];
 
 test('getCliArguments returns undefined release type with no args', () => {
   const result = getCliArguments(DEFAULT_ARGV);
@@ -125,10 +125,10 @@ test('runRelease stages release notes when update succeeds', () => {
   assert.ok(result);
   assert.strictEqual(result.status, 0);
   assert.strictEqual(calls.length, 2);
-  
+
   const [testCommand] = calls[0];
   assert.strictEqual(testCommand, 'npm');
-  
+
   const [execPath, [bin]] = calls[1];
   assert.strictEqual(execPath, process.execPath);
   assert.strictEqual(bin, require.resolve('standard-version/bin/cli.js'));
