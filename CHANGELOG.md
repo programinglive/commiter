@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.11](https://github.com/programinglive/commiter/compare/v1.1.10...v1.1.11) (2025-11-26)
+
+
+### 📝 Documentation
+
+* **website:** add open graph social media preview ([7a2f911](https://github.com/programinglive/commiter/commit/7a2f91156bcef6f351d4e914efc53776741baf69))
+
 ### [1.1.10](https://github.com/programinglive/commiter/compare/v1.1.9...v1.1.10) (2025-11-26)
 
 

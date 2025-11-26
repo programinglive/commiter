@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.11 | 2025-11-26 | **website:** add open graph social media preview (7a2f911) |
 | 1.1.10 | 2025-11-26 | **website:** add professional landing page and release tools (ec53e2d) |
 | 1.1.9 | 2025-11-24 | convert release scripts to CJS to support ESM projects (842da02) |
 | 1.1.8 | 2025-11-22 | update installation script to copy missing files and update gitignore (5d56259) |
@@ -37,6 +38,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.1.11 – 📝 Documentation
+
+Released on **2025-11-26**.
+
+- **website:** add open graph social media preview (7a2f911)
 
 ## 1.1.10 – ✨ Features
 
