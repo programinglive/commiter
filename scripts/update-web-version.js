@@ -1,9 +1,20 @@
 const fs = require('fs');
 const path = require('path');
+const { execSync } = require('child_process');
 
-// Get current version from package.json
-const packageJson = require('../package.json');
-const version = packageJson.version;
+// Get current version from latest git tag
+let version;
+try {
+    // Get the latest tag
+    const tag = execSync('git describe --tags --abbrev=0', { encoding: 'utf8' }).trim();
+    // Remove 'v' prefix if present
+    version = tag.startsWith('v') ? tag.substring(1) : tag;
+} catch (error) {
+    // Fallback to package.json if no tags exist
+    console.warn('⚠️  No git tags found, falling back to package.json version');
+    const packageJson = require('../package.json');
+    version = packageJson.version;
+}
 
 const indexPath = path.join(__dirname, '../web/index.html');
 let content = fs.readFileSync(indexPath, 'utf8');
@@ -23,4 +34,4 @@ content = content.replace(
 );
 
 fs.writeFileSync(indexPath, content);
-console.log(`✅ Updated website to version ${version}`);
+console.log(`✅ Updated website to version ${version} (from git tag)`);
