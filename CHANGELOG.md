@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.10](https://github.com/programinglive/commiter/compare/v1.1.9...v1.1.10) (2025-11-26)
+
+
+### ✨ Features
+
+* **website:** add professional landing page and release tools ([ec53e2d](https://github.com/programinglive/commiter/commit/ec53e2d5d2d1d61d899ba0349cb6771bb9e57385))
+
 ### [1.1.9](https://github.com/programinglive/commiter/compare/v1.1.8...v1.1.9) (2025-11-24)
 
 
