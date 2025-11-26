@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.1 | 2025-11-26 | **release:** improve website version update reliability (18f5ace) |
 | 1.2.0 | 2025-11-26 | See CHANGELOG for details. |
 | 1.1.11 | 2025-11-26 | **website:** add open graph social media preview (7a2f911) |
 | 1.1.10 | 2025-11-26 | **website:** add professional landing page and release tools (ec53e2d) |
@@ -41,6 +42,15 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.1 – 🐛 Bug Fixes
+
+Released on **2025-11-26**.
+
+- **release:** improve website version update reliability (18f5ace)
+- **website:** read version from git tags instead of package.json (8fe8af8)
+- **project:** update documentation and release scripts (88d02c6)
 
 ## 1.2.0
 

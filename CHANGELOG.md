@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.1](https://github.com/programinglive/commiter/compare/v1.2.0...v1.2.1) (2025-11-26)
+
+
+### 🐛 Bug Fixes
+
+* **release:** improve website version update reliability ([18f5ace](https://github.com/programinglive/commiter/commit/18f5acea973d49af07f2d41ebf035529d825429c))
+
+
+### ✨ Features
+
+* **website:** read version from git tags instead of package.json ([8fe8af8](https://github.com/programinglive/commiter/commit/8fe8af8098816713f5ad6a08f3a548173f89d57d))
+
 ## [1.2.0](https://github.com/programinglive/commiter/compare/v1.1.11...v1.2.0) (2025-11-26)
 
 
