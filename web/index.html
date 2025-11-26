@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Commiter - Automated commit conventions and release management tool for JavaScript/TypeScript projects. Enforce conventional commits, generate changelogs, and automate semantic versioning.">
+    <meta name="keywords"
+        content="commit, conventional commits, standard-version, changelog, versioning, semantic release, git hooks, husky, commitlint">
+    <meta name="author" content="Programming Live">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Commiter - Automated Release Management">
+    <meta property="og:description"
+        content="Enforce commit conventions, generate changelogs, and automate semantic versioning for your projects.">
+    <meta property="og:url" content="https://github.com/programinglive/commiter">
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <title>Commiter - Automated Commit Conventions & Release Management</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <span class="logo-icon">🚀</span>
+                    <span class="logo-text">Commiter</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="#releases">Releases</a></li>
+                    <li><a href="https://github.com/programinglive/commiter" target="_blank"
+                            class="btn-github">GitHub</a></li>
+                </ul>
+                <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span>v1.1.9 - Latest Release</span>
+                </div>
+                <h1 class="hero-title">
+                    Ship Releases with <span class="gradient-text">Confidence</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Commiter automates conventional commits, semantic versioning, and changelog generation.
+                    One command to bootstrap your entire release workflow.
+                </p>
+                <div class="hero-actions">
+                    <a href="#installation" class="btn btn-primary">
+                        Get Started
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                    <a href="https://www.npmjs.com/package/@programinglive/commiter" target="_blank"
+                        class="btn btn-secondary">
+                        View on NPM
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-value">1.1.9</div>
+                        <div class="stat-label">Latest Version</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">MIT</div>
+                        <div class="stat-label">License</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">Node 18+</div>
+                        <div class="stat-label">Compatibility</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="code-window">
+                    <div class="window-header">
+                        <div class="window-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <div class="window-title">terminal</div>
+                    </div>
+                    <div class="window-content">
+                        <div class="code-line"><span class="prompt">$</span> npx @programinglive/commiter</div>
+                        <div class="code-line output">✓ Installing dependencies...</div>
+                        <div class="code-line output">✓ Configuring Husky hooks...</div>
+                        <div class="code-line output">✓ Setting up commitlint...</div>
+                        <div class="code-line output success">🎉 Setup complete! Ready to release.</div>
+                        <div class="code-line"><span class="prompt">$</span> npm run release:patch</div>
+                        <div class="code-line output">✓ Running tests...</div>
+                        <div class="code-line output">✓ Bumping version to 1.0.1...</div>
+                        <div class="code-line output">✓ Updating CHANGELOG.md...</div>
+                        <div class="code-line output success">🚀 Release v1.0.1 ready!</div>
+                        <div class="code-line cursor">_</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Everything You Need for <span class="gradient-text">Professional
+                        Releases</span></h2>
+                <p class="section-subtitle">Commiter handles the entire release workflow so you can focus on building
+                    great software</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Enforced Conventions</h3>
+                    <p>Automatically validate commit messages using Conventional Commits format with Husky and
+                        commitlint</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Semantic Versioning</h3>
+                    <p>Intelligent version bumping based on commit types - major, minor, or patch releases</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Auto Changelog</h3>
+                    <p>Beautiful CHANGELOG.md generation with icons for each commit type and organized sections</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Git Hooks</h3>
+                    <p>Pre-commit and commit-msg validation via Husky ensures quality before code is committed</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>Test Integration</h3>
+                    <p>Automatically runs your test suite before releasing to prevent broken releases</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Zero Config</h3>
+                    <p>One command setup with sensible defaults. Works with npm, yarn, and pnpm out of the box</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="installation">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Quick <span class="gradient-text">Installation</span></h2>
+                <p class="section-subtitle">Get started in seconds with your preferred package manager</p>
+            </div>
+            <div class="install-options">
+                <div class="install-card">
+                    <div class="install-header">
+                        <h3>Global Installation</h3>
+                        <span class="install-badge">Recommended</span>
+                    </div>
+                    <div class="code-block">
+                        <code>npm install -g @programinglive/commiter</code>
+                        <button class="copy-btn" data-copy="npm install -g @programinglive/commiter">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <path d="M3 13V5C3 3.89543 3.89543 3 5 3H13" stroke="currentColor" stroke-width="1.5" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="install-card">
+                    <div class="install-header">
+                        <h3>Dev Dependency</h3>
+                    </div>
+                    <div class="code-block">
+                        <code>npm install --save-dev @programinglive/commiter</code>
+                        <button class="copy-btn" data-copy="npm install --save-dev @programinglive/commiter">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <path d="M3 13V5C3 3.89543 3.89543 3 5 3H13" stroke="currentColor" stroke-width="1.5" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="install-card">
+                    <div class="install-header">
+                        <h3>No Installation (NPX)</h3>
+                    </div>
+                    <div class="code-block">
+                        <code>npx @programinglive/commiter</code>
+                        <button class="copy-btn" data-copy="npx @programinglive/commiter">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <rect x="7" y="7" width="10" height="10" rx="2" stroke="currentColor"
+                                    stroke-width="1.5" />
+                                <path d="M3 13V5C3 3.89543 3.89543 3 5 3H13" stroke="currentColor" stroke-width="1.5" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Section -->
+    <section id="usage" class="usage">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Simple <span class="gradient-text">Usage</span></h2>
+                <p class="section-subtitle">Three steps to automated releases</p>
+            </div>
+            <div class="usage-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Setup Your Project</h3>
+                        <p>Run the setup command to configure Husky, commitlint, and release scripts</p>
+                        <div class="code-block">
+                            <code>npx @programinglive/commiter</code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Make Conventional Commits</h3>
+                        <p>Use conventional commit format for all your commits</p>
+                        <div class="code-block">
+                            <code>git commit -m "feat(auth): add JWT authentication"</code>
+                        </div>
+                        <div class="commit-types">
+                            <span class="commit-type">✨ feat</span>
+                            <span class="commit-type">🐛 fix</span>
+                            <span class="commit-type">📝 docs</span>
+                            <span class="commit-type">♻️ refactor</span>
+                            <span class="commit-type">⚡ perf</span>
+                            <span class="commit-type">✅ test</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Release Your Changes</h3>
+                        <p>Run the appropriate release command based on your changes</p>
+                        <div class="code-block">
+                            <code>npm run release:patch  # 1.0.0 → 1.0.1</code>
+                        </div>
+                        <div class="code-block">
+                            <code>npm run release:minor  # 1.0.0 → 1.1.0</code>
+                        </div>
+                        <div class="code-block">
+                            <code>npm run release:major  # 1.0.0 → 2.0.0</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Commit Types Reference -->
+    <section class="commit-reference">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Commit Types <span class="gradient-text">Reference</span></h2>
+                <p class="section-subtitle">All supported commit types with their icons and changelog sections</p>
+            </div>
+            <div class="reference-table">
+                <div class="table-header">
+                    <div>Type</div>
+                    <div>Icon</div>
+                    <div>Description</div>
+                    <div>Changelog Section</div>
+                </div>
+                <div class="table-row">
+                    <div><code>feat</code></div>
+                    <div>✨</div>
+                    <div>New feature</div>
+                    <div>✨ Features</div>
+                </div>
+                <div class="table-row">
+                    <div><code>fix</code></div>
+                    <div>🐛</div>
+                    <div>Bug fix</div>
+                    <div>🐛 Bug Fixes</div>
+                </div>
+                <div class="table-row">
+                    <div><code>perf</code></div>
+                    <div>⚡</div>
+                    <div>Performance improvement</div>
+                    <div>⚡ Performance</div>
+                </div>
+                <div class="table-row">
+                    <div><code>refactor</code></div>
+                    <div>♻️</div>
+                    <div>Code refactoring</div>
+                    <div>♻️ Refactors</div>
+                </div>
+                <div class="table-row">
+                    <div><code>docs</code></div>
+                    <div>📝</div>
+                    <div>Documentation changes</div>
+                    <div>📝 Documentation</div>
+                </div>
+                <div class="table-row">
+                    <div><code>style</code></div>
+                    <div>💄</div>
+                    <div>Code style changes</div>
+                    <div>💄 Styles</div>
+                </div>
+                <div class="table-row">
+                    <div><code>test</code></div>
+                    <div>✅</div>
+                    <div>Test additions/changes</div>
+                    <div>✅ Tests</div>
+                </div>
+                <div class="table-row">
+                    <div><code>build</code></div>
+                    <div>🏗️</div>
+                    <div>Build system changes</div>
+                    <div>🏗️ Build System</div>
+                </div>
+                <div class="table-row">
+                    <div><code>ci</code></div>
+                    <div>👷</div>
+                    <div>CI/CD changes</div>
+                    <div>👷 Continuous Integration</div>
+                </div>
+                <div class="table-row">
+                    <div><code>chore</code></div>
+                    <div>🧹</div>
+                    <div>Maintenance tasks</div>
+                    <div>🧹 Chores</div>
+                </div>
+                <div class="table-row">
+                    <div><code>revert</code></div>
+                    <div>⏪</div>
+                    <div>Revert previous commit</div>
+                    <div>⏪ Reverts</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Releases Section -->
+    <section id="releases" class="releases">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Recent <span class="gradient-text">Releases</span></h2>
+                <p class="section-subtitle">Latest updates and improvements</p>
+            </div>
+            <div class="releases-timeline">
+                <div class="release-item">
+                    <div class="release-badge">Latest</div>
+                    <div class="release-version">v1.1.9</div>
+                    <div class="release-date">November 24, 2025</div>
+                    <div class="release-type">🐛 Bug Fixes</div>
+                    <p class="release-description">Convert release scripts to CJS to support ESM projects</p>
+                </div>
+                <div class="release-item">
+                    <div class="release-version">v1.1.8</div>
+                    <div class="release-date">November 22, 2025</div>
+                    <div class="release-type">🐛 Bug Fixes</div>
+                    <p class="release-description">Update installation script to copy missing files and update gitignore
+                    </p>
+                </div>
+                <div class="release-item">
+                    <div class="release-version">v1.1.7</div>
+                    <div class="release-date">November 11, 2025</div>
+                    <div class="release-type">📝 Documentation</div>
+                    <p class="release-description">Recommend dev workflow MCP server for enhanced workflow automation
+                    </p>
+                </div>
+                <div class="release-item">
+                    <div class="release-version">v1.1.1</div>
+                    <div class="release-date">November 5, 2025</div>
+                    <div class="release-type">🐛 Bug Fixes</div>
+                    <p class="release-description">Eliminated fs.F_OK deprecation warning from release runs</p>
+                </div>
+                <div class="release-item">
+                    <div class="release-version">v1.0.12</div>
+                    <div class="release-date">October 29, 2025</div>
+                    <div class="release-type">✨ Features</div>
+                    <p class="release-description">Autodetects project test command before releasing</p>
+                </div>
+            </div>
+            <div class="releases-cta">
+                <a href="https://github.com/programinglive/commiter/releases" target="_blank" class="btn btn-secondary">
+                    View All Releases
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Automate Your Releases?</h2>
+                <p>Join developers who trust Commiter for professional release management</p>
+                <div class="cta-actions">
+                    <a href="#installation" class="btn btn-primary">Get Started Now</a>
+                    <a href="https://github.com/programinglive/commiter" target="_blank" class="btn btn-outline">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0110 4.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.137 18.165 20 14.418 20 10c0-5.523-4.477-10-10-10z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Star on GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <span class="logo-icon">🚀</span>
+                        <span class="logo-text">Commiter</span>
+                    </div>
+                    <p>Automated commit conventions and release management for modern development teams.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <ul>
+                            <li><a href="#features">Features</a></li>
+                            <li><a href="#installation">Installation</a></li>
+                            <li><a href="#usage">Usage</a></li>
+                            <li><a href="#releases">Releases</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="https://github.com/programinglive/commiter" target="_blank">GitHub</a></li>
+                            <li><a href="https://www.npmjs.com/package/@programinglive/commiter" target="_blank">NPM
+                                    Package</a></li>
+                            <li><a href="https://github.com/programinglive/commiter/issues" target="_blank">Issues</a>
+                            </li>
+                            <li><a href="https://www.conventionalcommits.org/" target="_blank">Conventional Commits</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <ul>
+                            <li><a href="https://github.com/programinglive/commiter/blob/main/CONTRIBUTING.md"
+                                    target="_blank">Contributing</a></li>
+                            <li><a href="https://github.com/programinglive/commiter/blob/main/CODE_OF_CONDUCT.md"
+                                    target="_blank">Code of Conduct</a></li>
+                            <li><a href="https://github.com/programinglive/commiter/blob/main/LICENSE"
+                                    target="_blank">License</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Programming Live. Released under the MIT License.</p>
+                <div class="footer-badges">
+                    <img src="https://img.shields.io/npm/v/%40programinglive%2Fcommiter.svg" alt="npm version">
+                    <img src="https://img.shields.io/npm/dm/%40programinglive%2Fcommiter.svg" alt="npm downloads">
+                    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="MIT License">
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+
+</html>
