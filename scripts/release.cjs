@@ -191,7 +191,7 @@ function runRelease({
   // Update website version
   try {
     console.log('🌐 Updating website version...');
-    const updateWebResult = spawnSync('npm', ['run', 'update:web'], { stdio: 'inherit', cwd });
+    const updateWebResult = spawnSync(process.execPath, ['scripts/update-web-version.js'], { stdio: 'inherit', cwd });
     if (updateWebResult.status === 0) {
       spawnSync('git', ['add', 'web/index.html'], { stdio: 'inherit', cwd });
     } else {
