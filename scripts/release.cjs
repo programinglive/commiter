@@ -188,9 +188,21 @@ function runRelease({
     }
   }
 
+  // Update website version
+  try {
+    console.log('🌐 Updating website version...');
+    const updateWebResult = spawnSync('npm', ['run', 'update:web'], { stdio: 'inherit', cwd });
+    if (updateWebResult.status === 0) {
+      spawnSync('git', ['add', 'web/index.html'], { stdio: 'inherit', cwd });
+    } else {
+      console.warn('⚠️  Failed to update website version');
+    }
+  } catch (error) {
+    console.warn(`⚠️  Skipping website version update: ${error.message}`);
+  }
+
   return releaseResult;
 }
-
 if (require.main === module) {
   try {
     const result = runRelease();

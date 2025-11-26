@@ -186,7 +186,21 @@ To see what would happen without making changes:
 npm run release -- --dry-run
 ```
 
-## Contributing
+## Website
+ 
+ The project includes a professional landing page in the `web/` directory.
+ 
+ ### Local Development
+ 
+ To run the website locally:
+ 
+ ```bash
+ npm run web
+ ```
+ 
+ This will serve the website at `http://localhost:3000`.
+ 
+ ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 

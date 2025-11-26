@@ -93,7 +93,8 @@ Closes #123
 3. Add tests for new features
 4. Ensure all tests pass: `npm test`
 5. Update the README.md if needed
-6. Create a Pull Request with a clear description
+6. If modifying the website, verify changes with `npm run web`
+7. Create a Pull Request with a clear description
 
 ## Release Process
 

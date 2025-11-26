@@ -28,8 +28,13 @@ Growing teams often struggle to keep release processes consistent: commit messag
   - Detects release type from CLI args or npm context.
   - Runs project tests via detected package manager before releasing.
   - Invokes `standard-version` with additional flags (e.g., preload patch for deprecated APIs).
+  - **[NEW]** Automatically updates website version in `web/index.html`.
 - **Preload Patching (`scripts/preload/fs-f-ok.cjs`)**
   - Hooks Node’s module loader to transparently replace deprecated `fs.F_OK` usages in `standard-version` without altering `node_modules`.
+- **Website & Documentation**
+  - Professional landing page in `web/` directory.
+  - Automated GitHub Releases generation.
+  - Open Graph social media preview support.
 - **Testing**
   - Suite executed via `node --test` covers setup utilities, release argument parsing, and the preload patch.
 
