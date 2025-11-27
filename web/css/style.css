@@ -163,7 +163,14 @@ body {
 .hero {
     padding: calc(var(--spacing-3xl) + 60px) 0 var(--spacing-3xl);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
+}
+
+.hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-3xl);
+    align-items: center;
 }
 
 .hero::before {
@@ -277,22 +284,19 @@ body {
 
 /* Hero Visual */
 .hero-visual {
-    position: absolute;
-    right: -100px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 600px;
+    position: relative;
+    width: 100%;
     animation: fadeInRight 0.8s ease-out 0.5s both;
 }
 
 @keyframes fadeInRight {
     from {
         opacity: 0;
-        transform: translateY(-50%) translateX(40px);
+        transform: translateX(40px);
     }
     to {
         opacity: 1;
-        transform: translateY(-50%) translateX(0);
+        transform: translateX(0);
     }
 }
 
@@ -338,6 +342,9 @@ body {
     padding: var(--spacing-md);
     font-family: 'Courier New', monospace;
     font-size: 0.875rem;
+    max-height: none;
+    overflow-y: auto;
+    min-height: auto;
 }
 
 .code-line {
@@ -870,8 +877,13 @@ body {
    Responsive Design
    =========================== */
 @media (max-width: 1024px) {
+    .hero .container {
+        grid-template-columns: 1fr;
+    }
+    
     .hero-visual {
-        display: none;
+        display: block;
+        margin-top: var(--spacing-2xl);
     }
     
     .hero-content {

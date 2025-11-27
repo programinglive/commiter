@@ -147,14 +147,36 @@ window.addEventListener('scroll', () => {
 // ===========================
 // Terminal Animation
 // ===========================
-const codeLines = document.querySelectorAll('.code-line');
-let delay = 0;
+function animateTerminal() {
+    const codeLines = document.querySelectorAll('.code-line');
+    let delay = 0;
 
-codeLines.forEach((line, index) => {
-    line.style.opacity = '0';
-    line.style.animation = `fadeIn 0.5s ease-out ${delay}s forwards`;
-    delay += 0.3;
-});
+    codeLines.forEach((line, index) => {
+        line.style.opacity = '0';
+        line.style.animation = 'none';
+        // Trigger reflow to restart animation
+        void line.offsetWidth;
+        line.style.animation = `fadeIn 0.5s ease-out ${delay}s forwards`;
+        delay += 0.3;
+    });
+}
+
+// Initial animation on page load
+animateTerminal();
+
+// Replay animation when scrolling back to the terminal
+const codeWindow = document.querySelector('.code-window');
+if (codeWindow) {
+    const terminalObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateTerminal();
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    terminalObserver.observe(codeWindow);
+}
 
 // Add fadeIn keyframe animation
 const style = document.createElement('style');
