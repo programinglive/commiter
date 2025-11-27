@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.2](https://github.com/programinglive/commiter/compare/v1.2.1...v1.2.2) (2025-11-27)
+
+
+### 🧹 Chores
+
+* update homepage url ([556b173](https://github.com/programinglive/commiter/commit/556b173db74c99e0d0b20045139f415736389727))
+
 ### [1.2.1](https://github.com/programinglive/commiter/compare/v1.2.0...v1.2.1) (2025-11-26)
 
 
