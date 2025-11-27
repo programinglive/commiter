@@ -36,7 +36,7 @@
   "bugs": {
     "url": "https://github.com/programinglive/commiter/issues"
   },
-  "homepage": "https://github.com/programinglive/commiter#readme",
+  "homepage": "https://commiter.programinglive.com",
   "type": "commonjs",
   "standard-version": {
     "releaseCommitMessageFormat": "chore(release): {{currentTag}} 🚀",
