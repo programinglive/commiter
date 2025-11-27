@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.4](https://github.com/programinglive/commiter/compare/v1.2.3...v1.2.4) (2025-11-27)
+
+
+### 🧹 Chores
+
+* **release:** 1.2.3 ([9d12f7e](https://github.com/programinglive/commiter/commit/9d12f7e7f9ec5d64b4f7a6d30a4c046e760d73bb))
+
+
+### 🐛 Bug Fixes
+
+* **web:** improve terminal layout and animation ([6d196f4](https://github.com/programinglive/commiter/commit/6d196f4f922e72ad32e9cb570046ff7bf82c398e))
+
 ### [1.2.3](https://github.com/programinglive/commiter/compare/v1.2.2...v1.2.3) (2025-11-27)
 
 
