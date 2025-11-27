@@ -14,7 +14,8 @@
     "release:minor": "node scripts/release.cjs minor",
     "release:patch": "node scripts/release.cjs patch",
     "web": "npx serve web",
-    "update:web": "node scripts/update-web-version.js"
+    "update:web": "node scripts/update-web-version.js",
+    "update:web:releases": "node scripts/update-web-releases.js"
   },
   "keywords": [
     "commit",
