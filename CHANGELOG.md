@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.3](https://github.com/programinglive/commiter/compare/v1.2.2...v1.2.3) (2025-11-27)
+
+
+### ✨ Features
+
+* automate website releases timeline updates from release notes ([5abf788](https://github.com/programinglive/commiter/commit/5abf788afd90dde0b8a52dc3658720044f40b2ee))
+
 ### [1.2.2](https://github.com/programinglive/commiter/compare/v1.2.1...v1.2.2) (2025-11-27)
 
 
