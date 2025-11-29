@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.5](https://github.com/programinglive/commiter/compare/v1.2.4...v1.2.5) (2025-11-29)
+
+
+### 🧹 Chores
+
+* **release:** v1.2.4 🚀 ([23e546a](https://github.com/programinglive/commiter/commit/23e546a070ef4ddc403f7d3a89750c501ec84f08))
+
+
+### ✅ Tests
+
+* add integration tests to verify web updates are only for commiter ([8b2b1ad](https://github.com/programinglive/commiter/commit/8b2b1ad045f088db03d9ccfea4dad54cb5278926))
+
 ### [1.2.4](https://github.com/programinglive/commiter/compare/v1.2.3...v1.2.4) (2025-11-27)
 
 

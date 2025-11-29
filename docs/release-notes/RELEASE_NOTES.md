@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.5 | 2025-11-29 | **release:** v1.2.4 🚀 (23e546a) |
 | 1.2.4 | 2025-11-27 | **release:** 1.2.3 (9d12f7e) |
 | 1.2.3 | 2025-11-27 | automate website releases timeline updates from release notes (5abf788) |
 | 1.2.2 | 2025-11-27 | update homepage url (556b173) |
@@ -49,6 +50,14 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.5 – 🧹 Chores
+
+Released on **2025-11-29**.
+
+- **release:** v1.2.4 🚀 (23e546a)
+- add integration tests to verify web updates are only for commiter (8b2b1ad)
 
 ## 1.2.4 – 🧹 Chores
 
