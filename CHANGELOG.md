@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.6](https://github.com/programinglive/commiter/compare/v1.2.5...v1.2.6) (2025-11-30)
+
+
+### 🐛 Bug Fixes
+
+* tests only run during release, not on commit ([15600a0](https://github.com/programinglive/commiter/commit/15600a0a558ea9fd38a77afd2c11f5e954d87c51))
+
 ### [1.2.5](https://github.com/programinglive/commiter/compare/v1.2.4...v1.2.5) (2025-11-29)
 
 
