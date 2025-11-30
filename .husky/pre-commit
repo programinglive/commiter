@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-npm test
+# Pre-commit hook - tests are run only during release

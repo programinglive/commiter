@@ -126,12 +126,12 @@ npm run release
 
 ## What Happens During Release?
 
-1. 🧪 Detects your package manager and runs the `test` script automatically
-2. 📊 Analyzes commits since last release
-3. 🔢 Bumps version in `package.json`
-4. 📝 Updates `CHANGELOG.md` with icons
-5. 🏷️ Creates a git tag
-6. 💾 Commits changes with format: `chore(release): v1.2.3 🚀`
+1. 🧪 **Runs tests** - Detects your package manager and runs the `test` script automatically (tests only run during release, not on commit)
+2. 📊 **Analyzes commits** - Examines commits since last release
+3. 🔢 **Bumps version** - Updates version in `package.json`
+4. 📝 **Updates changelog** - Generates `CHANGELOG.md` with icons
+5. 🏷️ **Creates tag** - Creates a git tag for the release
+6. 💾 **Commits release** - Commits changes with format: `chore(release): v1.2.3 🚀`
 
 ## Push Your Release
 
@@ -146,7 +146,7 @@ git push --follow-tags origin main
 The following hooks are automatically enforced:
 
 - **commit-msg**: Validates commit message format using commitlint
-- **pre-commit**: Runs tests before allowing commits
+- **pre-commit**: Empty hook (tests are run only during release, not on commit)
 
 ## Configuration Files
 

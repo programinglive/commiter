@@ -153,6 +153,13 @@ npx --no -- commitlint --edit "$1"
     fs.writeFileSync(path.join(huskyDir, 'commit-msg'), commitMsgHook);
     fs.chmodSync(path.join(huskyDir, 'commit-msg'), 0o755);
 
+    // Create pre-commit hook (tests run only during release)
+    const preCommitHook = `#!/usr/bin/env sh
+# Pre-commit hook - tests are run only during release
+`;
+    fs.writeFileSync(path.join(huskyDir, 'pre-commit'), preCommitHook);
+    fs.chmodSync(path.join(huskyDir, 'pre-commit'), 0o755);
+
     // Update .gitignore
     const gitignorePath = path.join(process.cwd(), '.gitignore');
     let gitignoreContent = '';
