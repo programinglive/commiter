@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.6 | 2025-11-30 | tests only run during release, not on commit (15600a0) |
 | 1.2.5 | 2025-11-29 | **release:** v1.2.4 🚀 (23e546a) |
 | 1.2.4 | 2025-11-27 | **release:** 1.2.3 (9d12f7e) |
 | 1.2.3 | 2025-11-27 | automate website releases timeline updates from release notes (5abf788) |
@@ -51,6 +52,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.6 – 🐛 Bug Fixes
+
+Released on **2025-11-30**.
+
+- tests only run during release, not on commit (15600a0)
 
 ## 1.2.5 – 🧹 Chores
 

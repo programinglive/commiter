@@ -27,8 +27,8 @@ Growing teams often struggle to keep release processes consistent: commit messag
 - **Release Helper (`scripts/release.js`)**
   - Detects release type from CLI args or npm context.
   - Runs project tests via detected package manager before releasing.
-  - Invokes `standard-version` with additional flags (e.g., preload patch for deprecated APIs).
-  - **[NEW]** Automatically updates website version in `web/index.html`.
+  - Invokes `standard-version`, passing the preload script via `NODE_OPTIONS`.
+  - Stays focused on repository assets only (website updates are intentionally manual to avoid cross-project impacts).
 - **Preload Patching (`scripts/preload/fs-f-ok.cjs`)**
   - Hooks Node’s module loader to transparently replace deprecated `fs.F_OK` usages in `standard-version` without altering `node_modules`.
 - **Website & Documentation**
