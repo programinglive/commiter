@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.7](https://github.com/programinglive/commiter/compare/v1.2.6...v1.2.7) (2025-12-02)
+
+
+### ♻️ Refactors
+
+* remove website auto updates ([c6f2498](https://github.com/programinglive/commiter/commit/c6f24986dd657d7eae91ac84e821a6dbbb492e37))
+
 ### [1.2.6](https://github.com/programinglive/commiter/compare/v1.2.5...v1.2.6) (2025-11-30)
 
 
