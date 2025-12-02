@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.8 | 2025-12-02 | remove website auto updates (c6f2498) |
 | 1.2.7 | 2025-12-02 | remove website auto updates (c6f2498) |
 | 1.2.6 | 2025-11-30 | tests only run during release, not on commit (15600a0) |
 | 1.2.5 | 2025-11-29 | **release:** v1.2.4 🚀 (23e546a) |
@@ -55,6 +56,15 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.8 – ♻️ Refactors
+
+Released on **2025-12-02**.
+
+- remove website auto updates (c6f2498)
+- **release:** 1.2.7 🚀 (cb97edc)
+- add netlify.toml for static site deployment (2f70ec7)
 
 ## 1.2.7 – ♻️ Refactors
 
