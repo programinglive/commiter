@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.8](https://github.com/programinglive/commiter/compare/v1.2.6...v1.2.8) (2025-12-02)
+
+
+### ♻️ Refactors
+
+* remove website auto updates ([c6f2498](https://github.com/programinglive/commiter/commit/c6f24986dd657d7eae91ac84e821a6dbbb492e37))
+
+
+### 🧹 Chores
+
+* **release:** 1.2.7 🚀 ([cb97edc](https://github.com/programinglive/commiter/commit/cb97edca4bccbccaf2e2b1228e0b0b6eef71dbb6))
+
+
+### 🏗️ Build System
+
+* add netlify.toml for static site deployment ([2f70ec7](https://github.com/programinglive/commiter/commit/2f70ec7be08970d7a51b6fe186ef3fac9a9cef9e))
+
 ### [1.2.7](https://github.com/programinglive/commiter/compare/v1.2.6...v1.2.7) (2025-12-02)
 
 
