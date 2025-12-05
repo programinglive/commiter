@@ -63,6 +63,7 @@ function setupCommiter() {
     packageJson.scripts['release:major'] = 'node scripts/release.cjs major';
     packageJson.scripts['release:minor'] = 'node scripts/release.cjs minor';
     packageJson.scripts['release:patch'] = 'node scripts/release.cjs patch';
+    packageJson.scripts['release:first'] = 'node scripts/release.cjs --first-release';
 
     // Add standard-version config
     packageJson['standard-version'] = {

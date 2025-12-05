@@ -59,6 +59,11 @@ test('buildStandardVersionArgs rejects unknown release type', () => {
   }, /Unknown release type/);
 });
 
+test('buildStandardVersionArgs handles --first-release flag', () => {
+  const args = buildStandardVersionArgs({ releaseType: undefined, extraArgs: ['--first-release'] });
+  assert.deepStrictEqual(args, ['--first-release']);
+});
+
 test('buildStandardVersionArgs appends extra args', () => {
   const args = buildStandardVersionArgs({ releaseType: 'minor', extraArgs: ['--prerelease', 'alpha'] });
   assert.deepStrictEqual(args, ['--release-as', 'minor', '--prerelease', 'alpha']);

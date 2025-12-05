@@ -21,7 +21,7 @@ Growing teams often struggle to keep release processes consistent: commit messag
 ## 5. Key Features
 - **Setup CLI (`index.js`)**
   - Installs dev dependencies (`standard-version`, `commitlint`, `husky`).
-  - Configures package scripts (`npm run release`, `release:major/minor/patch`).
+  - Configures package scripts (`npm run release`, `release:major/minor/patch`, `release:first`).
   - Creates Husky hooks and commitlint configuration.
   - Generates release helper script and ensures executable permissions (POSIX-friendly).
 - **Release Helper (`scripts/release.js`)**
