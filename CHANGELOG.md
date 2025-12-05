@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.9](https://github.com/programinglive/commiter/compare/v1.2.8...v1.2.9) (2025-12-05)
+
+
+### 🧹 Chores
+
+* add release:first script ([0240fce](https://github.com/programinglive/commiter/commit/0240fceaaad231074f1525b9d5208697cfa9d5fa))
+* update gitignore and release notes ([c12f935](https://github.com/programinglive/commiter/commit/c12f935aaeb56b412fdefdc888acea544bc83e3b))
+
+
+### 📝 Documentation
+
+* document release:first command and update tests ([876a208](https://github.com/programinglive/commiter/commit/876a20893a6a1fd3433992ba62d62ed6bd09c0b0))
+
 ### [1.2.8](https://github.com/programinglive/commiter/compare/v1.2.6...v1.2.8) (2025-12-02)
 
 
