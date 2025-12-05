@@ -13,6 +13,7 @@
     "release:major": "node scripts/release.cjs major",
     "release:minor": "node scripts/release.cjs minor",
     "release:patch": "node scripts/release.cjs patch",
+    "release:first": "node scripts/release.cjs --first-release",
     "web": "npx serve web"
   },
   "keywords": [
