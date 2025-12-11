@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.11](https://github.com/programinglive/commiter/compare/v1.2.10...v1.2.11) (2025-12-11)
+
+
+### 🧹 Chores
+
+* cleanup and add deployment scripts ([4124b5f](https://github.com/programinglive/commiter/commit/4124b5fc25f2975a62cccbfb3fa168c54e0058bf))
+
+
+### 🐛 Bug Fixes
+
+* **setup:** surface first release commands ([8701e9a](https://github.com/programinglive/commiter/commit/8701e9ae75fde65f55ab956e0636bcff6c0672a9))
+
 ### [1.2.10](https://github.com/programinglive/commiter/compare/v1.2.9...v1.2.10) (2025-12-11)
 
 

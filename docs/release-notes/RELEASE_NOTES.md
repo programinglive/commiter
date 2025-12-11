@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.11 | 2025-12-11 | cleanup and add deployment scripts (4124b5f) |
 | 1.2.10 | 2025-12-11 | enhance release workflow with first release support and patch defaults (d5f1334) |
 | 1.2.9 | 2025-12-05 | add release:first script (0240fce) |
 | 1.2.8 | 2025-12-02 | remove website auto updates (c6f2498) |
@@ -61,6 +62,14 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.11 – 🧹 Chores
+
+Released on **2025-12-11**.
+
+- cleanup and add deployment scripts (4124b5f)
+- **setup:** surface first release commands (8701e9a)
 
 ## 1.2.10 – ✨ Features
 
