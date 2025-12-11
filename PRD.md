@@ -28,6 +28,7 @@ Growing teams often struggle to keep release processes consistent: commit messag
   - Detects release type from CLI args or npm context.
   - Runs project tests via detected package manager before releasing.
   - Invokes `standard-version`, passing the preload script via `NODE_OPTIONS`.
+  - Supports first release mode that sets version to 0.0.1 for new projects.
   - Stays focused on repository assets only (website updates are intentionally manual to avoid cross-project impacts).
 - **Preload Patching (`scripts/preload/fs-f-ok.cjs`)**
   - Hooks Node’s module loader to transparently replace deprecated `fs.F_OK` usages in `standard-version` without altering `node_modules`.
@@ -59,11 +60,15 @@ Growing teams often struggle to keep release processes consistent: commit messag
    - Run `npx @programinglive/commiter`.
    - Tool installs dependencies, updates `package.json`, and scaffolds Husky hooks.
    - Maintainer confirms success message and new scripts.
-2. **Standard Release**
-   - Developer runs `npm run release minor`.
+2. **First Release**
+   - Developer runs `npm run release:first` for new projects.
+   - Commiter sets version to 0.0.1, runs tests, creates initial changelog and git tag.
+   - Project foundation established with proper semantic versioning.
+3. **Standard Release**
+   - Developer runs `npm run release minor` or `npm run release` (defaults to patch).
    - Commiter runs tests, ensures preload patch prevents deprecation warnings, executes `standard-version`.
    - Release completes with updated changelog and git tag.
-3. **CI Pipeline**
+4. **CI Pipeline**
    - CI job executes `npm run release -- --prerelease beta`.
    - Logs show tests executed, no deprecation warnings, and release artifacts generated.
 

@@ -26,18 +26,18 @@ const SEMVER_REGEX = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 const LOCKFILE_PREFERENCES = [
   { manager: 'pnpm', file: 'pnpm-lock.yaml' },
   { manager: 'yarn', file: 'yarn.lock' },
-  { manager: 'bun', file: 'bun.lockb' },
+  { manager: 'bun', file: 'bun.lock' },
   { manager: 'npm', file: 'package-lock.json' }
 ];
 
 function getCliArguments(argv = process.argv) {
   const rawArgs = argv.slice(2);
   if (rawArgs.length === 0) {
-    return { releaseType: undefined, extraArgs: [] };
+    return { releaseType: 'patch', extraArgs: [] };
   }
 
   if (rawArgs[0].startsWith('-')) {
-    return { releaseType: undefined, extraArgs: rawArgs };
+    return { releaseType: 'patch', extraArgs: rawArgs };
   }
 
   const [firstArg, ...rest] = rawArgs;
@@ -60,7 +60,14 @@ function getNpmRunArgument(env = process.env) {
 
 function buildStandardVersionArgs({ releaseType, extraArgs }) {
   const args = [];
-  if (releaseType) {
+  
+  // Handle --first-release flag
+  const isFirstRelease = Array.isArray(extraArgs) && extraArgs.includes('--first-release');
+  if (isFirstRelease) {
+    args.push('--release-as', '0.0.1');
+    // Remove --first-release from extraArgs to avoid passing it to standard-version
+    extraArgs = extraArgs.filter(arg => arg !== '--first-release');
+  } else if (releaseType) {
     const normalized = releaseType.trim();
     const isValid = VALID_RELEASE_TYPES.has(normalized) || SEMVER_REGEX.test(normalized);
     if (!isValid) {

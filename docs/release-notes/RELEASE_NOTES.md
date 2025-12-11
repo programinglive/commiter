@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.9 | 2025-12-05 | add release:first script (0240fce) |
 | 1.2.8 | 2025-12-02 | remove website auto updates (c6f2498) |
 | 1.2.7 | 2025-12-02 | remove website auto updates (c6f2498) |
 | 1.2.6 | 2025-11-30 | tests only run during release, not on commit (15600a0) |
@@ -57,6 +58,15 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.9 – 🧹 Chores
+
+Released on **2025-12-05**.
+
+- add release:first script (0240fce)
+- update gitignore and release notes (c12f935)
+- document release:first command and update tests (876a208)
 
 ## 1.2.8 – ♻️ Refactors
 
