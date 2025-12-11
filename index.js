@@ -175,10 +175,12 @@ npx --no -- commitlint --edit "$1"
 
     console.log('\n✅ Commiter setup complete!\n');
     console.log('📚 Available commands:');
-    console.log('  npm run release major  - Create a major release (1.0.0 → 2.0.0)');
-    console.log('  npm run release minor  - Create a minor release (1.0.0 → 1.1.0)');
-    console.log('  npm run release patch  - Create a patch release (1.0.0 → 1.0.1)');
-    console.log('  npm run release        - Auto-detect version bump');
+    console.log('  npm run release major        - Create a major release (1.0.0 → 2.0.0)');
+    console.log('  npm run release minor        - Create a minor release (1.0.0 → 1.1.0)');
+    console.log('  npm run release patch        - Create a patch release (1.0.0 → 1.0.1)');
+    console.log('  npm run release              - Auto-detect version bump');
+    console.log('  npm run release:first        - Initialize the first release at 0.0.1');
+    console.log('  npm run release -- --first   - Alternative first release flag (0.0.1 start)');
     console.log('  npm run release -- --prerelease beta  - Create a beta prerelease\n');
     console.log('🎯 Commit format: type(scope): subject');
     console.log('   Example: feat(auth): add user login\n');

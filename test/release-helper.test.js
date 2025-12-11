@@ -12,15 +12,15 @@ const {
 
 const DEFAULT_ARGV = ['node', 'scripts/release.cjs'];
 
-test('getCliArguments returns undefined release type with no args', () => {
+test('getCliArguments defaults release type to patch with no args', () => {
   const result = getCliArguments(DEFAULT_ARGV);
-  assert.deepStrictEqual(result, { releaseType: undefined, extraArgs: [] });
+  assert.deepStrictEqual(result, { releaseType: 'patch', extraArgs: [] });
 });
 
-test('getCliArguments treats leading option as extra arg', () => {
+test('getCliArguments treats leading option as extra arg while defaulting to patch', () => {
   const argv = [...DEFAULT_ARGV, '--prerelease', 'alpha'];
   const result = getCliArguments(argv);
-  assert.deepStrictEqual(result, { releaseType: undefined, extraArgs: ['--prerelease', 'alpha'] });
+  assert.deepStrictEqual(result, { releaseType: 'patch', extraArgs: ['--prerelease', 'alpha'] });
 });
 
 test('getCliArguments parses release type followed by extra args', () => {
@@ -61,7 +61,7 @@ test('buildStandardVersionArgs rejects unknown release type', () => {
 
 test('buildStandardVersionArgs handles --first-release flag', () => {
   const args = buildStandardVersionArgs({ releaseType: undefined, extraArgs: ['--first-release'] });
-  assert.deepStrictEqual(args, ['--first-release']);
+  assert.deepStrictEqual(args, ['--release-as', '0.0.1']);
 });
 
 test('buildStandardVersionArgs appends extra args', () => {
