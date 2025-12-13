@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.16](https://github.com/programinglive/commiter/compare/v1.2.15...v1.2.16) (2025-12-13)
+
+
+### 👷 Continuous Integration
+
+* upgrade to node 20 and update npm for OIDC ([5f7d9a0](https://github.com/programinglive/commiter/commit/5f7d9a0d668ab5702879841de2f9d0818fa8f6bd))
+
 ### [1.2.15](https://github.com/programinglive/commiter/compare/v1.2.14...v1.2.15) (2025-12-13)
 
 
