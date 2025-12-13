@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.13](https://github.com/programinglive/commiter/compare/v1.2.12...v1.2.13) (2025-12-13)
+
+
+### 👷 Continuous Integration
+
+* enable npm trusted publishing (OIDC) with provenance ([5e1e852](https://github.com/programinglive/commiter/commit/5e1e852abfa6860e7e1533895ebf3f2996a11bfb))
+
 ### [1.2.12](https://github.com/programinglive/commiter/compare/v1.2.10...v1.2.12) (2025-12-13)
 
 
