@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.12](https://github.com/programinglive/commiter/compare/v1.2.10...v1.2.12) (2025-12-13)
+
+
+### 🧹 Chores
+
+* cleanup and add deployment scripts ([4124b5f](https://github.com/programinglive/commiter/commit/4124b5fc25f2975a62cccbfb3fa168c54e0058bf))
+* **release:** 1.2.11 🚀 ([2bbf62a](https://github.com/programinglive/commiter/commit/2bbf62a569546e06a7c27f0a2ecae838493161c6))
+
+
+### 🐛 Bug Fixes
+
+* resolve npm pkg warnings ([6d7a193](https://github.com/programinglive/commiter/commit/6d7a1937d70e6cf2f69edd6c7def8deba7a732d7))
+* **setup:** surface first release commands ([8701e9a](https://github.com/programinglive/commiter/commit/8701e9ae75fde65f55ab956e0636bcff6c0672a9))
+
 ### [1.2.11](https://github.com/programinglive/commiter/compare/v1.2.10...v1.2.11) (2025-12-11)
 
 
