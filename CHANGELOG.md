@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.15](https://github.com/programinglive/commiter/compare/v1.2.14...v1.2.15) (2025-12-13)
+
+
+### 👷 Continuous Integration
+
+* remove registry-url to fix OIDC auth conflict ([c49b6e8](https://github.com/programinglive/commiter/commit/c49b6e81195c5b9dc40611ee87fd22d45c33e3a9))
+
 ### [1.2.14](https://github.com/programinglive/commiter/compare/v1.2.13...v1.2.14) (2025-12-13)
 
 
