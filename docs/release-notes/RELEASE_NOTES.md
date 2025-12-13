@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.14 | 2025-12-13 | remove legacy auth token env (8508deb) |
 | 1.2.13 | 2025-12-13 | enable npm trusted publishing (OIDC) with provenance (5e1e852) |
 | 1.2.12 | 2025-12-13 | cleanup and add deployment scripts (4124b5f) |
 | 1.2.11 | 2025-12-11 | cleanup and add deployment scripts (4124b5f) |
@@ -67,6 +68,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.14 – 👷 Continuous Integration
+
+Released on **2025-12-13**.
+
+- remove legacy auth token env (8508deb)
 
 ## 1.2.13 – 👷 Continuous Integration
 
