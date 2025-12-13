@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.14](https://github.com/programinglive/commiter/compare/v1.2.13...v1.2.14) (2025-12-13)
+
+
+### 👷 Continuous Integration
+
+* remove legacy auth token env ([8508deb](https://github.com/programinglive/commiter/commit/8508deb5ee725519848588780d897f03fdb725eb))
+
 ### [1.2.13](https://github.com/programinglive/commiter/compare/v1.2.12...v1.2.13) (2025-12-13)
 
 
