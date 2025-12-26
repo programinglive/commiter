@@ -11,6 +11,9 @@ const FS_FOK_PRELOAD_FLAG = buildPreloadFlag(fsFokPreloadPath);
 
 require('./preload/fs-f-ok.cjs');
 
+const DEFAULT_PRD_RELATIVE_PATH = path.join('docs', 'PRD.md');
+const DEFAULT_PRD_DISPLAY_PATH = 'docs/PRD.md';
+
 const VALID_RELEASE_TYPES = new Set([
   'major',
   'minor',
@@ -161,6 +164,8 @@ function runRelease({
     throw new Error('Working tree has uncommitted changes. Commit or stash before running release.');
   }
 
+  ensurePrdPresence({ cwd, dependencies });
+
   const testResult = runProjectTests({ spawn, env });
   if (testResult && typeof testResult.status === 'number' && testResult.status !== 0) {
     return testResult;
@@ -219,8 +224,30 @@ module.exports = {
   detectPackageManager,
   runProjectTests,
   runRelease,
-  isWorkingTreeClean
+  isWorkingTreeClean,
+  ensurePrdPresence
 };
+
+function ensurePrdPresence({ cwd = process.cwd(), dependencies = {} } = {}) {
+  const {
+    fsExistsSync = fs.existsSync,
+    logger = console,
+    prdRelativePath = DEFAULT_PRD_RELATIVE_PATH,
+    prdDisplayPath = DEFAULT_PRD_DISPLAY_PATH
+  } = dependencies;
+
+  const resolvedPath = path.isAbsolute(prdRelativePath)
+    ? prdRelativePath
+    : path.join(cwd, prdRelativePath);
+
+  if (fsExistsSync(resolvedPath)) {
+    return true;
+  }
+
+  const warn = typeof logger?.warn === 'function' ? logger.warn.bind(logger) : console.warn.bind(console);
+  warn(`⚠️  Product Requirements Document missing (${prdDisplayPath}). Add ${DEFAULT_PRD_DISPLAY_PATH} so teams understand release expectations.`);
+  return false;
+}
 
 function buildPreloadFlag(filePath) {
   const resolved = path.resolve(filePath);

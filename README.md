@@ -128,10 +128,11 @@ npm run release
 
 1. 🧪 **Runs tests** - Detects your package manager and runs the `test` script automatically (tests only run during release, not on commit)
 2. 📊 **Analyzes commits** - Examines commits since last release
-3. 🔢 **Bumps version** - Updates version in `package.json`
-4. 📝 **Updates changelog** - Generates `CHANGELOG.md` with icons
-5. 🏷️ **Creates tag** - Creates a git tag for the release
-6. 💾 **Commits release** - Commits changes with format: `chore(release): v1.2.3 🚀`
+3. 📘 **Verifies documentation** – Warns if `docs/PRD.md` is missing so every project keeps an up-to-date PRD
+4. 🔢 **Bumps version** - Updates version in `package.json`
+5. 📝 **Updates changelog** - Generates `CHANGELOG.md` with icons
+6. 🏷️ **Creates tag** - Creates a git tag for the release
+7. 💾 **Commits release** - Commits changes with format: `chore(release): v1.2.3 🚀`
 
 ## Push Your Release
 

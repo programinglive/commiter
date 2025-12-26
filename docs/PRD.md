@@ -47,7 +47,7 @@ Growing teams often struggle to keep release processes consistent: commit messag
    - Exit with non-zero status if tests or standard-version commands fail.
 3. CLI should provide friendly console output (status icons, instructions).
 4. The preload script must eliminate `[DEP0176] fs.F_OK` warnings on supported Node versions.
-5. Documentation (README, PRD, release notes) remains shipped with the package.
+5. Documentation (README, PRD, release notes) remains shipped with the package. Each project integrating Commiter must keep a `docs/PRD.md` file present in the repository. The release helper enforces this by warning when the PRD is missing so maintainers remember to author or update the document before tagging releases.
 
 ## 7. Non-Functional Requirements
 - **Compatibility**: Supports Node.js 18+ (aligning with dependencies); tested on Windows/macOS/Linux.

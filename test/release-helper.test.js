@@ -6,6 +6,7 @@ const {
   getNpmRunArgument,
   buildStandardVersionArgs,
   runRelease,
+  ensurePrdPresence,
   VALID_RELEASE_TYPES,
   SEMVER_REGEX
 } = require('../scripts/release.cjs');
@@ -57,6 +58,69 @@ test('buildStandardVersionArgs rejects unknown release type', () => {
   assert.throws(() => {
     buildStandardVersionArgs({ releaseType: 'weird', extraArgs: [] });
   }, /Unknown release type/);
+});
+
+test('ensurePrdPresence returns true when PRD exists', () => {
+  let observedPath = null;
+  const result = ensurePrdPresence({
+    cwd: '/repo',
+    dependencies: {
+      fsExistsSync: (inputPath) => {
+        observedPath = inputPath;
+        return true;
+      },
+      prdRelativePath: path.join('docs', 'PRD.md')
+    }
+  });
+
+  assert.strictEqual(result, true);
+  assert.strictEqual(observedPath, path.join('/repo', 'docs', 'PRD.md'));
+});
+
+test('ensurePrdPresence warns but continues when PRD missing', () => {
+  let warning = '';
+  const result = ensurePrdPresence({
+    cwd: '/repo',
+    dependencies: {
+      fsExistsSync: () => false,
+      logger: {
+        warn: (message) => {
+          warning = message;
+        }
+      },
+      prdDisplayPath: 'docs/PRD.md'
+    }
+  });
+
+  assert.strictEqual(result, false);
+  assert.match(warning, /Product Requirements Document missing/i);
+});
+
+test('runRelease warns when PRD missing but still proceeds', () => {
+  const warnings = [];
+  const calls = [];
+  const spawn = (...args) => {
+    calls.push(args);
+    return { status: 0 };
+  };
+
+  runRelease({
+    argv: DEFAULT_ARGV,
+    env: {},
+    spawn,
+    dependencies: {
+      isWorkingTreeClean: () => true,
+      fsExistsSync: () => false,
+      logger: {
+        warn: (msg) => warnings.push(msg)
+      },
+      updateReleaseNotes: () => false
+    }
+  });
+
+  assert.ok(warnings.length > 0);
+  assert.match(warnings[0], /Product Requirements Document missing/i);
+  assert.strictEqual(calls.length, 2);
 });
 
 test('buildStandardVersionArgs handles --first-release flag', () => {
