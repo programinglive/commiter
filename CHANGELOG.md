@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.17](https://github.com/programinglive/commiter/compare/v1.2.16...v1.2.17) (2025-12-26)
+
+
+### 📝 Documentation
+
+* **web:** update homepage for v1.2.16 release ([c4ba36e](https://github.com/programinglive/commiter/commit/c4ba36ed3b9ec50f16df92b4cc37094f3173fc3a))
+
+
+### ✨ Features
+
+* **release:** enforce PRD presence warning ([227e237](https://github.com/programinglive/commiter/commit/227e237012cb56f9b570e69f96dc4bd2e836b319))
+
 ### [1.2.16](https://github.com/programinglive/commiter/compare/v1.2.15...v1.2.16) (2025-12-13)
 
 
