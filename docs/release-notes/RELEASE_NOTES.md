@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.17 | 2025-12-26 | **web:** update homepage for v1.2.16 release (c4ba36e) |
 | 1.2.16 | 2025-12-13 | upgrade to node 20 and update npm for OIDC (5f7d9a0) |
 | 1.2.15 | 2025-12-13 | remove registry-url to fix OIDC auth conflict (c49b6e8) |
 | 1.2.14 | 2025-12-13 | remove legacy auth token env (8508deb) |
@@ -73,6 +74,14 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.17 – 📝 Documentation
+
+Released on **2025-12-26**.
+
+- **web:** update homepage for v1.2.16 release (c4ba36e)
+- **release:** enforce PRD presence warning (227e237)
 
 ## 1.2.16 – 👷 Continuous Integration
 
