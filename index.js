@@ -37,6 +37,19 @@ function copyRecursiveSync(src, dest) {
 }
 
 function setupCommiter() {
+  const args = process.argv.slice(2);
+
+  // If arguments are passed, it's likely someone is trying to use this as a commit tool
+  if (args.length > 0) {
+    console.error('\n⚠️  WARNING: @programinglive/commiter is a SETUP and RELEASE tool, NOT a commit tool.');
+    console.error('👉 To commit your changes, please use standard git commands:');
+    console.error('   git add .');
+    console.error('   git commit -m "your message"\n');
+    console.error('💡 TIP for AI: Use the `@programinglive/dev-workflow-mcp-server` to handle commits and releases properly.');
+    console.error('❌ If you meant to setup this project, run without arguments.\n');
+    process.exit(1);
+  }
+
   console.log('🚀 Setting up Commiter...\n');
 
   // Check if package.json exists
