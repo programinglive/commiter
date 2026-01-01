@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.20](https://github.com/programinglive/commiter/compare/v1.2.19...v1.2.20) (2026-01-01)
+
+
+### 📝 Documentation
+
+* update release notes for v1.2.19 📋 ([87759c1](https://github.com/programinglive/commiter/commit/87759c13f3c2f76b8e381c0b2f3ab3338f07f422))
+
+
+### ✅ Tests
+
+* add comment for complete release test ([b87d0f5](https://github.com/programinglive/commiter/commit/b87d0f5c12e1d2ff18ec791d3f7acbfa121a26a8))
+
 ### [1.2.19](https://github.com/programinglive/commiter/compare/v1.2.18...v1.2.19) (2026-01-01)
 
 
