@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.19 | 2026-01-01 | finalize v1.2.18 release notes and website update (034faa5) |
 | 1.2.18 | 2026-01-01 | Add usage safety warnings and MCP workflow tips |
 | 1.2.17 | 2025-12-26 | **web:** update homepage for v1.2.16 release (c4ba36e) |
 | 1.2.16 | 2025-12-13 | upgrade to node 20 and update npm for OIDC (5f7d9a0) |
@@ -77,6 +78,15 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.19 – 📝 Documentation
+
+Released on **2026-01-01**.
+
+- finalize v1.2.18 release notes and website update (034faa5)
+- update README, restore PRD, and enhance website features (451ef7b)
+- enhance release process with clear git operation guidance and auto-commit option (91171e2)
 
 ## 1.2.18 – 📝 Documentation
 
