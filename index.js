@@ -210,3 +210,4 @@ if (require.main === module) {
 }
 
 module.exports = { setupCommiter, ensureSafeTestScript };
+// Test change for complete release
