@@ -202,6 +202,17 @@ function runRelease({
     const gitAddResult = spawnSync('git', ['add', releaseNotesPath], { stdio: 'inherit', cwd });
     if (!gitAddResult || typeof gitAddResult.status !== 'number' || gitAddResult.status !== 0) {
       console.warn('⚠️  Release notes updated but failed to stage. Please add manually: git add ' + releaseNotesPath);
+    } else {
+      console.log('\n🎯 Release notes generated and staged successfully!');
+      console.log('\n📋 NEXT STEPS REQUIRED:');
+      console.log('   ✅ Release notes have been staged for commit');
+      console.log('   🔄 You need to commit and push the release notes:');
+      console.log('      git commit -m "docs: update release notes for version"');
+      console.log('      git push');
+      console.log('\n💡 AI ASSISTANCE:');
+      console.log('   🤖 Use the dev-workflow MCP server to handle the commit and push automatically');
+      console.log('   📝 The release notes are now staged and ready for commit');
+      console.log('');
     }
   }
 
