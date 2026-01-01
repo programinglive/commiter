@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.2.18 | 2026-01-01 | Add usage safety warnings and MCP workflow tips |
 | 1.2.17 | 2025-12-26 | **web:** update homepage for v1.2.16 release (c4ba36e) |
 | 1.2.16 | 2025-12-13 | upgrade to node 20 and update npm for OIDC (5f7d9a0) |
 | 1.2.15 | 2025-12-13 | remove registry-url to fix OIDC auth conflict (c49b6e8) |
@@ -75,6 +76,16 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.2.18 – 📝 Documentation
+
+Released on **2026-01-01**.
+
+- **release-notes:** add 1.2.17 entry (0a79779)
+- **web:** refresh homepage content for v1.2.17 (2fc6666)
+- add usage warning and MCP dev-workflow tip (df7bc00)
+- add automated tests for usage warnings (af6283e)
 
 ## 1.2.17 – 📝 Documentation
 
