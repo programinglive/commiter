@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.18](https://github.com/programinglive/commiter/compare/v1.2.17...v1.2.18) (2026-01-01)
+
+
+### 📝 Documentation
+
+* **release-notes:** add 1.2.17 entry ([0a79779](https://github.com/programinglive/commiter/commit/0a7977964e9231a53d7d006cec5e847daeee2033))
+* **web:** refresh homepage content for v1.2.17 ([2fc6666](https://github.com/programinglive/commiter/commit/2fc6666369e18a0dbda9488d9ed0ac6a09298f95))
+
+
+### ✨ Features
+
+* add usage warning and MCP dev-workflow tip ([df7bc00](https://github.com/programinglive/commiter/commit/df7bc0078f75780f3daaeb703b6fe2b248910446))
+
+
+### ✅ Tests
+
+* add automated tests for usage warnings ([af6283e](https://github.com/programinglive/commiter/commit/af6283edfa4e1e677fc20bfc5e6b243db192867f))
+
 ### [1.2.17](https://github.com/programinglive/commiter/compare/v1.2.16...v1.2.17) (2025-12-26)
 
 
