@@ -14,7 +14,8 @@ A standardized commit convention and release management tool for your repository
 - 📝 **Changelog Generation** - Automatic CHANGELOG.md with icons
 - 🔒 **Git Hooks** - Pre-commit and commit-msg validation via Husky
 - 🎨 **Icon Support** - Each commit type has a dedicated icon in releases
-- 💡 **AI Safety & Guidance** - Built-in detection for misuse, guiding users and AI assistants to standard git commands or the recommended MCP workflow
+- 🎯 **Enhanced Release Process** - Clear console guidance and optional auto-commit for release notes
+- 🤖 **AI-Optimized Workflow** - Built-in guidance for AI assistants with clear next steps and automated git operations
 
 ## Installation
 
@@ -117,6 +118,20 @@ For breaking changes:
 npm run release:major
 ```
 
+### Complete Release (Auto-commit & Push)
+
+For fully automated release with git operations:
+
+```bash
+npm run release:complete
+```
+
+This command:
+- Runs the standard release process
+- Automatically commits release notes with versioned message
+- Pushes changes to remote
+- Provides success confirmation
+
 ### Automatic Release
 
 Let `standard-version` determine the version bump based on commits:
@@ -125,6 +140,8 @@ Let `standard-version` determine the version bump based on commits:
 npm run release
 ```
 
+**Note**: This command shows clear guidance for git operations needed after release notes generation.
+
 ## What Happens During Release?
 
 1. 🧪 **Runs tests** - Detects your package manager and runs the `test` script automatically (tests only run during release, not on commit)
@@ -132,16 +149,48 @@ npm run release
 3. 📘 **Verifies documentation** – Warns if `docs/PRD.md` is missing so every project keeps an up-to-date PRD
 4. 🔢 **Bumps version** - Updates version in `package.json`
 5. 📝 **Updates changelog** - Generates `CHANGELOG.md` with icons
-6. 🏷️ **Creates tag** - Creates a git tag for the release
-7. 💾 **Commits release** - Commits changes with format: `chore(release): v1.2.3 🚀`
+6. 📋 **Generates release notes** - Creates and stages release notes entry
+7. 🏷️ **Creates tag** - Creates a git tag for the release
+8. 💾 **Commits release** - Commits changes with format: `chore(release): v1.2.3 🚀`
+9. 🎯 **Shows next steps** - Provides clear guidance for git operations needed
+
+## Release Notes Management
+
+### Standard Release (Manual Git Operations)
+
+When using `npm run release`, the tool provides clear console guidance:
+
+```
+🎯 Release notes generated and staged successfully!
+
+📋 NEXT STEPS REQUIRED:
+   ✅ Release notes have been staged for commit
+   🔄 You need to commit and push the release notes:
+      git commit -m "docs: update release notes for version"
+      git push
+
+💡 AI ASSISTANCE:
+   🤖 Use the dev-workflow MCP server to handle the commit and push automatically
+   📝 The release notes are now staged and ready for commit
+```
+
+### Complete Release (Automated Git Operations)
+
+Use `npm run release:complete` for full automation:
+- ✅ Release completed
+- ✅ Release notes generated
+- ✅ Changes committed
+- ✅ Changes pushed
 
 ## Push Your Release
 
-After running a release command, push to remote:
+After running a standard release command, push to remote:
 
 ```bash
 git push --follow-tags origin main
 ```
+
+For complete releases, pushing is handled automatically.
 
 ## Pre-commit Hooks
 
