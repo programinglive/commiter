@@ -14,6 +14,7 @@ A standardized commit convention and release management tool for your repository
 - 📝 **Changelog Generation** - Automatic CHANGELOG.md with icons
 - 🔒 **Git Hooks** - Pre-commit and commit-msg validation via Husky
 - 🎨 **Icon Support** - Each commit type has a dedicated icon in releases
+- 💡 **AI Safety & Guidance** - Built-in detection for misuse, guiding users and AI assistants to standard git commands or the recommended MCP workflow
 
 ## Installation
 
