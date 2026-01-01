@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.19](https://github.com/programinglive/commiter/compare/v1.2.18...v1.2.19) (2026-01-01)
+
+
+### 📝 Documentation
+
+* finalize v1.2.18 release notes and website update ([034faa5](https://github.com/programinglive/commiter/commit/034faa5dcae1294b57fbaf2773ce14a085259724))
+* update README, restore PRD, and enhance website features ([451ef7b](https://github.com/programinglive/commiter/commit/451ef7bf0fff925e3589fa7a6c7dbe8e76c3e93d))
+
+
+### ✨ Features
+
+* enhance release process with clear git operation guidance and auto-commit option ([91171e2](https://github.com/programinglive/commiter/commit/91171e2d426650a2e74250b6b9a3c9a9b8bb875e))
+
 ### [1.2.18](https://github.com/programinglive/commiter/compare/v1.2.17...v1.2.18) (2026-01-01)
 
 
