@@ -1,2 +1,3 @@
 #!/usr/bin/env sh
-# Pre-commit hook - tests are run only during release
+
+node scripts/verify-tests.cjs

@@ -144,7 +144,7 @@ npm run release
 
 ## What Happens During Release?
 
-1. 🧪 **Runs tests** - Detects your package manager and runs the `test` script automatically (tests only run during release, not on commit)
+1. 🧪 **Runs tests** - Detects your package manager and runs the `test` script automatically
 2. 📊 **Analyzes commits** - Examines commits since last release
 3. 📘 **Verifies documentation** – Warns if `docs/PRD.md` is missing so every project keeps an up-to-date PRD
 4. 🔢 **Bumps version** - Updates version in `package.json`
@@ -197,7 +197,7 @@ For complete releases, pushing is handled automatically.
 The following hooks are automatically enforced:
 
 - **commit-msg**: Validates commit message format using commitlint
-- **pre-commit**: Empty hook (tests are run only during release, not on commit)
+- **pre-commit**: Enforces test cases verification before allowing commits (`node scripts/verify-tests.cjs`). If no test cases are found or tests fail, the commit is blocked (AI-assisted engineering standard).
 
 ## Configuration Files
 

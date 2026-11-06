@@ -117,6 +117,18 @@ function setupCommiter() {
       fs.copyFileSync(updateNotesSource, updateNotesDest);
     }
 
+    // Copy verify-tests.cjs
+    const verifyTestsSource = path.join(__dirname, 'scripts', 'verify-tests.cjs');
+    const verifyTestsDest = path.join(releaseScriptDir, 'verify-tests.cjs');
+    if (fs.existsSync(verifyTestsSource)) {
+      fs.copyFileSync(verifyTestsSource, verifyTestsDest);
+      try {
+        fs.chmodSync(verifyTestsDest, 0o755);
+      } catch (error) {
+        // Ignore chmod errors on non-POSIX systems
+      }
+    }
+
     // Copy preload directory
     const preloadSource = path.join(__dirname, 'scripts', 'preload');
     const preloadDest = path.join(releaseScriptDir, 'preload');
@@ -167,9 +179,10 @@ npx --no -- commitlint --edit "$1"
     fs.writeFileSync(path.join(huskyDir, 'commit-msg'), commitMsgHook);
     fs.chmodSync(path.join(huskyDir, 'commit-msg'), 0o755);
 
-    // Create pre-commit hook (tests run only during release)
+    // Create pre-commit hook (verifies test cases exist and pass before commit)
     const preCommitHook = `#!/usr/bin/env sh
-# Pre-commit hook - tests are run only during release
+
+node scripts/verify-tests.cjs
 `;
     fs.writeFileSync(path.join(huskyDir, 'pre-commit'), preCommitHook);
     fs.chmodSync(path.join(huskyDir, 'pre-commit'), 0o755);
