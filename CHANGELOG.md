@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/programinglive/commiter/compare/v1.2.20...v1.3.0) (2026-11-06)
+
+
+### 📝 Documentation
+
+* add missing npm run release command to website ([47475a3](https://github.com/programinglive/commiter/commit/47475a3c4fc834be9b31cf6724f4015ad222ba58))
+* update release notes for v1.2.20 📋 ([8b3abcb](https://github.com/programinglive/commiter/commit/8b3abcb12a263951b2fba09d59a5830d22352155))
+* update web, README, and PRD with enhanced release process features ([73f7c02](https://github.com/programinglive/commiter/commit/73f7c02fb952018b0bc98f683149bbd5947fd7e2))
+
+
+### 👷 Continuous Integration
+
+* **publish:** gunakan Node 24 agar npm@latest kompatibel ([43447af](https://github.com/programinglive/commiter/commit/43447afd302413a4ccd50a8339eeede9f5f773d9))
+
+
+### ✨ Features
+
+* **pre-commit:** enforce test cases presence and execution before commit ([89f0122](https://github.com/programinglive/commiter/commit/89f012240c8604125157be317f48b05ac3e50c98))
+
 ### [1.2.20](https://github.com/programinglive/commiter/compare/v1.2.19...v1.2.20) (2026-01-01)
 
 
