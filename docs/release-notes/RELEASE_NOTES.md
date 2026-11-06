@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.3.0 | 2026-11-06 | See CHANGELOG for details. |
 | 1.2.20 | 2026-01-01 | update release notes for v1.2.19 📋 (87759c1) |
 | 1.2.19 | 2026-01-01 | finalize v1.2.18 release notes and website update (034faa5) |
 | 1.2.18 | 2026-01-01 | Add usage safety warnings and MCP workflow tips |
@@ -81,6 +82,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.3.0
+
+Released on **2026-11-06**.
+
+- See CHANGELOG for details.
 
 ## 1.2.20 – 📝 Documentation
 
