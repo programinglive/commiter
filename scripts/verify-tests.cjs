@@ -160,6 +160,19 @@ function detectTestCommand({ cwd = process.cwd(), env = process.env } = {}) {
     }
   }
 
+  // Check Python (pytest)
+  if (fs.existsSync(path.join(cwd, 'pyproject.toml')) || fs.existsSync(path.join(cwd, 'pytest.ini')) || fs.existsSync(path.join(cwd, '.pytest_cache'))) {
+    const venvPytestWin = path.join(cwd, '.venv', 'Scripts', 'pytest.exe');
+    const venvPytestPosix = path.join(cwd, '.venv', 'bin', 'pytest');
+    if (fs.existsSync(venvPytestWin)) {
+      return { command: venvPytestWin, args: [] };
+    }
+    if (fs.existsSync(venvPytestPosix)) {
+      return { command: venvPytestPosix, args: [] };
+    }
+    return { command: 'pytest', args: [] };
+  }
+
   return null;
 }
 
@@ -202,7 +215,8 @@ function verifyTests({
   const result = spawn(testCommand.command, testCommand.args, {
     stdio: 'inherit',
     env,
-    cwd
+    cwd,
+    shell: process.platform === 'win32'
   });
 
   if (result && typeof result.status === 'number' && result.status !== 0) {
