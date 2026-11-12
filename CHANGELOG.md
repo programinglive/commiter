@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/programinglive/commiter/compare/v1.5.0...v1.5.1) (2026-11-12)
+
+
+### 📝 Documentation
+
+* **plan:** migrate the eight repos to release v2 ([ad0457f](https://github.com/programinglive/commiter/commit/ad0457fe390a99ae010a8a1ac9f777ef0bc10376))
+* **web:** show v1.5.0 and the atomic release flow ([17478c9](https://github.com/programinglive/commiter/commit/17478c9fc0741f5c683df410cdae0c20cb075c96))
+
+
+### ♻️ Refactors
+
+* **release:** translate engine messages to English ([e110be5](https://github.com/programinglive/commiter/commit/e110be52131c250d560d50098b88eafa3e144e5d))
+
 ## [1.5.0](https://github.com/programinglive/commiter/compare/v1.4.0...v1.5.0) (2026-11-12)
 
 
