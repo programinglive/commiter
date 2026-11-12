@@ -37,13 +37,17 @@ function seed(t) {
   git(seedRepo, 'commit', '-m', 'initial');
   git(seedRepo, 'remote', 'add', 'origin', origin);
   git(seedRepo, 'push', '-u', 'origin', 'main');
+  // Keep the bare repository's default branch aligned with the pushed branch.
+  git(origin, 'symbolic-ref', 'HEAD', 'refs/heads/main');
 
   return { root, origin };
 }
 
 function clone(root, origin, name) {
   const cwd = path.join(root, name);
-  git(root, 'clone', origin, cwd);
+  // `-b main` is explicit: a bare repo created with `git init --bare` may still
+  // point HEAD at `master`, and cloning it would then check out nothing.
+  git(root, 'clone', '-b', 'main', origin, cwd);
   // Distinct identities keep the two release commits distinct even when both
   // processes run inside the same second; otherwise identical trees and
   // timestamps would produce the same OID and the race would be a no-op.
