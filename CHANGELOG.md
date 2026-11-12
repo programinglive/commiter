@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/programinglive/commiter/compare/v1.3.0...v1.4.0) (2026-11-12)
+
+
+### 📝 Documentation
+
+* update release notes for v1.3.0 ([957719d](https://github.com/programinglive/commiter/commit/957719ddbe6f19aa112829fdcd1da675f78471b4))
+* **web:** update website and release notes for v1.3.0 ([7e52719](https://github.com/programinglive/commiter/commit/7e527196762444ad3d0104c36cf60b70538d99d4))
+
+
+### 🐛 Bug Fixes
+
+* **release:** run standard-version via node, fail closed, roll back rejected tags ([226b105](https://github.com/programinglive/commiter/commit/226b1058685cffd570966a26797f56e401ac08de))
+* **verify-tests:** add python pytest detection and windows shell spawn ([b247551](https://github.com/programinglive/commiter/commit/b247551e3e4ebe3bee169cfc3344a6729ca66c0b))
+
+
+### ✨ Features
+
+* **cli:** add 'commiter release' as the single release entry point ([e119ac4](https://github.com/programinglive/commiter/commit/e119ac4d7981712081462ab404b78b2b2680f300))
+* **release:** push the release tag and prove it reached origin ([0bb9df9](https://github.com/programinglive/commiter/commit/0bb9df9ae1ac786f057885831b0e6d23bf32bf62))
+
 ## [1.3.0](https://github.com/programinglive/commiter/compare/v1.2.20...v1.3.0) (2026-11-06)
 
 
