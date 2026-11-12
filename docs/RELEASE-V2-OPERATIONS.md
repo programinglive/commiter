@@ -20,13 +20,16 @@ In `package.json`:
     "release": {
       "branch": "main",
       "verify": "npm test",
-      "releaseNotes": "docs/release-notes/RELEASE_NOTES.md"
+      "releaseNotes": "docs/release-notes/RELEASE_NOTES.md",
+      "additionalFiles": ["docs/AI_CONTEXT.md"]
     }
   }
 }
 ```
 
-Default `verify` is `npm test`. No skip flag or env bypass. `verify` runs after generating release files, before commit/tag. Tests must not change the generated tree. The release engine stages only package.json, npm lockfiles, CHANGELOG.md, README.md, and configured releaseNotes file. Repositories using additional `standard-version` bumpFiles require extending the explicit allowlist before rollout; silent inclusion is prohibited.
+Default `verify` is `npm test`. No skip flag or env bypass. `verify` runs after generating release files, before commit/tag. Tests must not change the generated tree. The release engine stages only package.json, npm lockfiles, CHANGELOG.md, README.md, the configured releaseNotes file, and the configured `additionalFiles`. Repositories using additional `standard-version` bumpFiles must declare them in `additionalFiles` before rollout; silent inclusion is prohibited.
+
+`additionalFiles` is validated before the release starts. Each entry must be a relative path inside the repository. Absolute paths, drive letters, backslashes, `..`, `.`, empty segments, and `.git/` are rejected. The nearest existing ancestor is resolved, so a symlinked directory cannot point outside the repository. The clean-tree requirement is unchanged, and the engine never deletes a path outside the allowlist.
 
 ## Phase order
 
@@ -55,6 +58,22 @@ Default `verify` is `npm test`. No skip flag or env bypass. `verify` runs after 
 
 Run on a dedicated branch first. Existing per-repo `scripts/release.cjs` files must no longer orchestrate their own release. Route npm release scripts to `commiter release`. Any repo whose release branch is not `main` must configure `commiter.release.branch`. Review `standard-version` config for custom bumpFiles, unusual prefixes, prerelease identifiers, lockfiles, and hooks. Run bare-remote integration tests covering a happy path, branch push reject, tag collision, concurrent patch/minor, network ambiguity, and hook failure. Do not release to production until these scenarios pass on each repository family.
 
+## Removing a local engine patch
+
+A repository that patched the engine to widen the allowlist can drop the patch
+once the engine version with `additionalFiles` is installed:
+
+1. Add the file to `commiter.release.additionalFiles` in `package.json`.
+2. Delete the patch file (for example `patches/@programinglive+commiter+1.5.1.patch`).
+3. Remove `patch-package` from `postinstall` if no other patch remains.
+4. Run `npm install` and confirm the installed engine is the new version.
+5. Run `npx commiter release --dry-run` and confirm it prints `PLAN ONLY`.
+6. Run the release on a dedicated branch first and confirm the additional file
+   is committed and the tree is clean afterwards.
+
+Do not remove the patch before the new engine version is published and
+installed: the release would fail on the additional file.
+
 ## Breaking changes from 1.4.0
 
 1. **`commiter.release.branch` is required per repository.** The default is
@@ -70,8 +89,10 @@ Run on a dedicated branch first. Existing per-repo `scripts/release.cjs` files m
 
 ## Status
 
-This engine is the adopted release path. It is covered by 54 tests, including
-real-git integration against local bare remotes, concurrency, and one injected
-failure per phase. It has not been published as a new npm version yet; the
-migration of the eight consumer repositories is tracked separately.
+This engine is the adopted release path. It is covered by 72 tests, including
+real-git integration against local bare remotes, concurrency classification,
+path-safety validation, and one injected failure per phase. The concurrency
+classification and `additionalFiles` support are in the repository and have not
+been published as a new npm version yet; the migration of the eight consumer
+repositories is tracked separately.
 

@@ -98,12 +98,14 @@ the local ones, and reports `PUBLISHED` only when both match.
 
 ## 4. Failure states
 
-Every run ends in one of five states.
+Every run ends in one of seven states.
 
 | State | Meaning | Tree |
 |---|---|---|
 | `PUBLISHED` | Remote branch and tag OIDs match the local release objects | Clean |
 | `PLAN_ONLY` | `--dry-run`; nothing was written | Clean |
+| `REJECTED` | The push was rejected and the remote did not change | Generated files preserved after the local commit is rolled back |
+| `REJECTED_CONCURRENT_UPDATE` | Another release moved the branch first; this release is provably not published | Generated files preserved after the local commit is rolled back |
 | `FAILED` | The release stopped before publication | Clean if nothing was committed; generated files preserved if a commit was rolled back |
 | `UNKNOWN` | The remote could not prove success or rejection | Local commit and tag preserved |
 | `MANUAL_RECOVERY` | A rollback or restore itself failed | Inspect by hand |
@@ -123,6 +125,23 @@ because per-repo variation is what produced eight divergent scripts.
 | `commiter.release.branch` | `main` | The repo releases from another branch, e.g. `master` |
 | `commiter.release.verify` | `npm test` | The repo verifies with something else, e.g. `npm run verify` |
 | `commiter.release.releaseNotes` | `docs/release-notes/RELEASE_NOTES.md` | The repo keeps its notes elsewhere |
+| `commiter.release.additionalFiles` | `[]` | The release generator writes a repository file that is not one of the standard artifacts |
+
+`additionalFiles` is the only way to widen the release allowlist, and it is
+validated before anything runs:
+
+- every entry must be a relative path inside the repository;
+- absolute paths, drive letters, backslashes, `..`, `.`, empty segments, and
+  `.git/` are rejected;
+- the nearest existing ancestor is resolved, so a symlinked directory cannot
+  point outside the repository;
+- the clean-tree requirement is unchanged: the file must be clean before the
+  release starts, and only the generator may change it during the release.
+
+The default allowlist stays strict: `package.json`, npm lockfiles,
+`CHANGELOG.md`, `README.md`, and the configured release notes file. A file
+outside that set fails the release and is left in the working tree for
+inspection; the engine never deletes a path it was not allowed to touch.
 
 There is no configuration for the tag format, the push target, or the rollback
 behaviour. Those are the same everywhere on purpose.

@@ -156,8 +156,9 @@ It runs the whole release and stops at the first failure:
 | Wrong branch or stale clone | `FAILED` | Stops before writing anything |
 | Tag already exists | `FAILED` | Stops before generation; no commit is created |
 | Tests fail | `FAILED` | Generated files are restored; the reason names the failing output |
-| Push rejected | `FAILED` | Local tag deleted, commit rolled back with `--mixed`, generated files kept |
-| Remote unreadable after push | `UNKNOWN` | Local commit and tag preserved; do not retry before inspecting |
+| Push rejected, remote unchanged | `REJECTED` | Local tag deleted, commit rolled back with `--mixed`, generated files kept |
+| Another release moved the branch first | `REJECTED_CONCURRENT_UPDATE` | This release is provably not published; local commit and tag rolled back |
+| Remote unreadable or ambiguous after push | `UNKNOWN` | Local commit and tag preserved; do not retry before inspecting |
 
 It never leaves a "version X" commit behind without a tag. That is how a release
 disappears silently: the commit looks released, the tag never arrived, and the
@@ -189,6 +190,28 @@ The release branch defaults to `main`. A repository that releases from `master`
 
 Without it the release fails with a message naming the expected and actual
 branch, before it writes anything.
+
+### Additional release files
+
+The release allowlist is strict: `package.json`, npm lockfiles, `CHANGELOG.md`,
+`README.md`, and the release notes file. A repository whose release generator
+also writes another file must declare it:
+
+```json
+{
+  "commiter": {
+    "release": {
+      "additionalFiles": ["docs/AI_CONTEXT.md"]
+    }
+  }
+}
+```
+
+Every entry is validated before the release starts: it must be a relative path
+inside the repository, with no absolute path, drive letter, backslash, `..`,
+`.`, empty segment, or `.git/` access, and no symlink that escapes the
+repository. The clean-tree requirement is unchanged, and a file outside the
+allowlist still fails the release.
 
 ### Full explanation
 

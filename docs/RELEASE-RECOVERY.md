@@ -11,12 +11,14 @@ fails, it reports `MANUAL_RECOVERY`. Both mean: a human decides.
 
 ## 1. Read the state first
 
-Every run returns one of five states.
+Every run returns one of seven states.
 
 | State | Meaning | Safe to retry? |
 |---|---|---|
 | `PUBLISHED` | Remote branch and tag OIDs match the local release objects | No need |
 | `PLAN_ONLY` | `--dry-run`; nothing was written | Yes |
+| `REJECTED` | The push was rejected and the remote did not change | Yes, after reading the reason |
+| `REJECTED_CONCURRENT_UPDATE` | Another release moved the branch first; this release is provably not published | Yes, after re-syncing |
 | `FAILED` | Stopped before publication | Yes, after reading the reason |
 | `UNKNOWN` | The remote could not prove success or rejection | **No** |
 | `MANUAL_RECOVERY` | A rollback or restore failed | **No** |
@@ -90,7 +92,40 @@ which one stands. Never force a tag that another release already owns.
 
 ---
 
-## 3. `MANUAL_RECOVERY`
+## 3. `REJECTED` and `REJECTED_CONCURRENT_UPDATE`
+
+Both states mean the release was **not** published. The difference is why.
+
+### `REJECTED`
+
+The push was rejected and the remote did not change: a branch protection rule, a
+rejecting hook, or a missing permission. The engine rolled the local commit back
+and kept the generated files.
+
+1. Read the reason; it names the remote's rejection.
+2. Fix the cause.
+3. Confirm `git status --porcelain` shows only the generated files.
+4. Run the release again.
+
+### `REJECTED_CONCURRENT_UPDATE`
+
+Another release moved the branch first. The engine proved this release is not on
+the remote: the local commit is not an ancestor of the remote branch, and the
+local tag object is not the remote tag. The local commit and tag were rolled
+back.
+
+1. `git fetch origin` and inspect the new head.
+2. Re-sync the branch (`git pull --ff-only`).
+3. Run the release again on top of the new head. The version is recomputed from
+   the new `package.json`.
+4. Do not force-push and do not reuse the old tag.
+
+If the engine cannot prove the ancestry (for example, the fetch fails), it
+reports `UNKNOWN` instead. Treat that as `UNKNOWN`, not as a rejection.
+
+---
+
+## 4. `MANUAL_RECOVERY`
 
 `MANUAL_RECOVERY` means the engine tried to undo its own work and the undo
 failed. The reason names both the original failure and the rollback failure.
@@ -137,7 +172,7 @@ changes in the working tree. A failed rollback usually means one of:
 
 ---
 
-## 4. `FAILED` with preserved files
+## 5. `FAILED` with preserved files
 
 A `FAILED` state after the commit was created (a rejected push, a failed tag)
 rolls the commit back but **keeps the generated files** so you can inspect them.
@@ -152,7 +187,7 @@ tree is clean and the next run starts from the same place.
 
 ---
 
-## 5. Prevention
+## 6. Prevention
 
 - Configure `commiter.release.branch` in every repository. ERP uses `master`;
   everything else uses `main`.
