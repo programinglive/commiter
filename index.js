@@ -48,17 +48,17 @@ function runReleaseCommand(argv = []) {
   const result = runRelease({ cwd: process.cwd(), type, extraArgs });
 
   if (!result.ok) {
-    console.error(`❌ Release gagal [${result.state}]: ${result.reason}`);
+    console.error(`❌ Release failed [${result.state}]: ${result.reason}`);
     process.exitCode = 1;
     return result;
   }
 
   if (result.dryRun) {
-    console.log(`PLAN ONLY: ${result.tag} (tidak ada perubahan)`);
+    console.log(`PLAN ONLY: ${result.tag} (no changes)`);
     return result;
   }
 
-  console.log(`✅ Rilis ${result.tag} selesai; commit branch dan annotated tag diverifikasi di origin.`);
+  console.log(`✅ Release ${result.tag} complete; branch commit and annotated tag verified on origin.`);
   return result;
 }
 

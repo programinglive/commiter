@@ -77,7 +77,7 @@ async function runPair(t, firstType, secondType) {
   assert.equal(firstResult.ok, true, firstResult.reason);
   assert.equal(firstResult.state, 'PUBLISHED');
   assert.equal(secondResult.ok, false, 'the second release must not succeed');
-  assert.match(secondResult.reason, /origin|remote|Tag|tidak identik/i);
+  assert.match(secondResult.reason, /origin|remote|Tag|not identical/i);
 
   return { firstResult, secondResult };
 }
@@ -115,5 +115,5 @@ test('two concurrent processes from the same parent: exactly one publishes', asy
   assert.equal(published[0].state, 'PUBLISHED');
   assert.equal(rejected.length, 1);
   assert.ok(['FAILED', 'UNKNOWN'].includes(rejected[0].state), rejected[0].state);
-  assert.match(rejected[0].reason, /origin|remote|Tag|tidak identik/i);
+  assert.match(rejected[0].reason, /origin|remote|Tag|not identical/i);
 });

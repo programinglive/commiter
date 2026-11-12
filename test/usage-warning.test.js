@@ -39,5 +39,5 @@ test('an invalid release type fails closed with a clear reason', () => {
 
   assert.equal(result.ok, false);
   assert.equal(result.state, 'FAILED');
-  assert.match(result.reason, /Tipe rilis tidak dikenal/);
+  assert.match(result.reason, /Unknown release type/);
 });

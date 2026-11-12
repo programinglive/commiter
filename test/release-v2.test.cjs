@@ -50,7 +50,7 @@ test('dirty tree and stale branch are rejected',t=>{
   git(cwd,'commit','--allow-empty','-m','local only');
   const result=runRelease({cwd,extraArgs:['--dry-run'],log:()=>{}});
   assert.equal(result.ok,false);
-  assert.match(result.reason,/tidak identik/);
+  assert.match(result.reason,/not identical/);
 });
 test('sync README replaces all version lines',t=>{
   const {cwd}=fixture(t);

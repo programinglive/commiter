@@ -137,7 +137,7 @@ test('atomic push rejection: the release fails instead of falling back', (t) => 
   const result = runRelease({ cwd, log: () => {} });
 
   assert.equal(result.state, 'FAILED', result.reason);
-  assert.match(result.reason, /Atomic push ditolak|atomic/i);
+  assert.match(result.reason, /Atomic push rejected|atomic/i);
   assert.equal(git(cwd, 'rev-parse', 'HEAD'), before);
   assert.equal(git(cwd, 'ls-remote', 'origin', 'refs/heads/main').split(/\s+/)[0], before);
   assert.equal(git(cwd, 'ls-remote', 'origin', 'refs/tags/v1.0.1'), '');
