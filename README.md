@@ -5,7 +5,32 @@
 [![publish status](https://img.shields.io/github/actions/workflow/status/programinglive/commiter/publish.yml?label=publish)](https://github.com/programinglive/commiter/actions/workflows/publish.yml)
 [![license: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A standardized commit convention and release management tool for your repository using `standard-version`.
+A commit convention and release tool for repositories that use `standard-version`.
+It enforces Conventional Commits, then runs the whole release in one command:
+version bump, changelog, release notes, README version, tag, and a **verified**
+push of that tag to origin.
+
+## Release
+
+```bash
+npx @programinglive/commiter release          # patch
+npx @programinglive/commiter release minor
+npx @programinglive/commiter release major
+```
+
+One command does all of this, and stops at the first failure:
+
+1. refuses to run on a dirty working tree
+2. runs the project's test script
+3. bumps the version and writes the changelog
+4. updates `docs/release-notes/RELEASE_NOTES.md` and the README version line
+5. amends the release commit and moves the tag onto it
+6. pushes **only** `refs/tags/<tag>` and proves it arrived with `ls-remote`
+
+If the tag already exists — two people releasing at once — the command fails
+loudly, removes the local tag, and undoes the release commit. It never leaves a
+"version X" commit behind without a tag, because that is how a release silently
+disappears.
 
 ## Features
 

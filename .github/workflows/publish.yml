@@ -1,23 +1,39 @@
-name: Publish to NPM
+name: Release
 
+# Satu tag -> satu rilis yang lengkap.
+#
+# MENGAPA SATU WORKFLOW
+# ---------------------
+# Sebelumnya hanya publikasi npm yang otomatis. Akibatnya, pada 12 Nov 2026:
+#   - npm di 1.4.0, tetapi GitHub Releases berhenti di v1.1.9 (2025-11-26)
+#   - situs commiter.programinglive.com masih menampilkan v1.3.0
+#   - README masih menyebut "commit convention tooling" padahal ada perintah rilis
+# Tiga artefak yang seharusnya lahir dari satu tag, lahir dari tiga tempat
+# berbeda, dan dua di antaranya berhenti tanpa alarm.
 on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag yang ingin dirilis ulang (mis. v1.4.0)'
+        required: true
+
+permissions:
+  contents: read
 
 jobs:
   publish:
+    name: Test and publish to npm
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '24'
 
@@ -27,11 +43,65 @@ jobs:
           npm config set registry https://registry.npmjs.org/
           npm config set //registry.npmjs.org/:_authToken ""
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      - name: Run tests
-        run: npm test
+      - run: npm test
 
-      - name: Publish to NPM
+      # Publikasi memakai OIDC + provenance, jadi tidak ada token npm yang
+      # disimpan sebagai secret. Kalau tag ini sudah terbit, langkah ini gagal
+      # dengan "cannot publish over the previously published versions" — itu
+      # benar: rilis ulang tidak boleh menimpa versi yang sudah ada.
+      - name: Publish to npm
         run: npm publish --provenance --access public
+
+  github-release:
+    name: Create the GitHub Release
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Releases berhenti dibuat setelah v1.1.9 karena tidak ada langkah ini.
+      # Catatan rilis dibuat GitHub dari commit sejak tag sebelumnya, sehingga
+      # tidak perlu memelihara daftar terpisah yang bisa basi.
+      - name: Create release from the tag
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "release $TAG sudah ada; tidak ditimpa"
+            exit 0
+          fi
+          gh release create "$TAG" --title "$TAG" --generate-notes
+
+  deploy-web:
+    name: Deploy the website
+    needs: publish
+    runs-on: ubuntu-latest
+    env:
+      NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+      SITE_ID: 50a97fe7-8589-42b5-8445-716c38f99c80
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      # Tanpa token, langkah ini harus terlihat, bukan dilewati diam-diam.
+      # Situs yang tertinggal 2 versi terjadi justru karena tidak ada yang tahu
+      # deploy-nya tidak pernah berjalan.
+      - name: Require the Netlify token
+        run: |
+          if [ -z "${NETLIFY_AUTH_TOKEN}" ]; then
+            echo "::error::Secret NETLIFY_AUTH_TOKEN belum diset di repo ini."
+            echo "Buat token di https://app.netlify.com/user/applications#personal-access-tokens"
+            echo "lalu: gh secret set NETLIFY_AUTH_TOKEN -R programinglive/commiter"
+            exit 1
+          fi
+
+      - name: Deploy
+        run: npx --yes netlify-cli@17 deploy --prod --dir=web --site="$SITE_ID" --auth="$NETLIFY_AUTH_TOKEN"

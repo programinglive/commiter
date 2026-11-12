@@ -16,12 +16,13 @@ const { runRelease, VALID_RELEASE_TYPES } = require('./lib/release');
  * Split the arguments that follow `commiter release` into a release type and
  * the flags standard-version should receive untouched.
  *
- * Only `patch`, `minor` and `major` are consumed as a type. A missing type
- * stays `null` so standard-version decides the bump itself (patch by default).
- * Every other token is forwarded verbatim, in its original order.
+ * Every type in `VALID_RELEASE_TYPES` is consumed as a type, including the
+ * `pre*` variants. A missing type stays `null`; `runRelease` then resolves it to
+ * `patch`, so standard-version never auto-detects the bump. Every other token is
+ * forwarded verbatim, in its original order.
  *
  * @param {string[]} [argv] Raw arguments, usually `process.argv.slice(2)`.
- * @returns {{ type: null | 'patch' | 'minor' | 'major', extraArgs: string[] }}
+ * @returns {{ type: null | string, extraArgs: string[] }}
  */
 function parseReleaseArgs(argv = []) {
   const args = Array.isArray(argv) ? argv.slice() : [];
@@ -256,7 +257,7 @@ node scripts/verify-tests.cjs
     console.log('  npm run release major        - Create a major release (1.0.0 → 2.0.0)');
     console.log('  npm run release minor        - Create a minor release (1.0.0 → 1.1.0)');
     console.log('  npm run release patch        - Create a patch release (1.0.0 → 1.0.1)');
-    console.log('  npm run release              - Auto-detect version bump');
+    console.log('  npm run release              - Create a patch release (default)');
     console.log('  npm run release:first        - Initialize the first release at 0.0.1');
     console.log('  npm run release -- --first   - Alternative first release flag (0.0.1 start)');
     console.log('  npm run release -- --prerelease beta  - Create a beta prerelease\n');

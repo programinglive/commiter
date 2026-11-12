@@ -18,13 +18,29 @@ function fakeSpawn(responses) {
   return spawn;
 }
 
+// The tag now comes from package.json, and the release notes/README steps are
+// injected so these tests stay focused on the tag push. `scripts: {}` keeps the
+// test gate out of the way.
+function release(options = {}) {
+  return runRelease({
+    readPackageJson: () => ({ version: '1.4.0', scripts: {} }),
+    updateNotes: () => false,
+    syncReadme: () => false,
+    log: () => {},
+    ...options,
+  });
+}
+
+function standardVersionInvocation(spawn) {
+  return spawn.invocations.find((invocation) => invocation.cmd === process.execPath);
+}
+
 test('push memakai ref tag eksplisit, bukan --tags', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     // Happy path: origin advertises the tag this run just pushed.
     'ls-remote': { status: 0, stdout: '9f1c2ab4d5e6\trefs/tags/v1.4.0\n', stderr: '' },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, true);
   const push = spawn.calls.find((c) => c.startsWith('git push'));
@@ -35,10 +51,9 @@ test('push memakai ref tag eksplisit, bukan --tags', () => {
 
 test('push tag yang ditolak menggagalkan rilis', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     'refs/tags/v1.4.0': { status: 1, stdout: '', stderr: '! [rejected] already exists' },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, false);
   assert.match(result.reason, /rejected|gagal/i);
@@ -47,10 +62,9 @@ test('push tag yang ditolak menggagalkan rilis', () => {
 
 test('tag harus terbukti ada di origin', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     'ls-remote': { status: 0, stdout: '', stderr: '' },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, false);
   assert.match(result.reason, /tidak ditemukan di origin/i);
@@ -58,10 +72,9 @@ test('tag harus terbukti ada di origin', () => {
 
 test('ref tag memakai garis miring biasa, juga di Windows', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     'ls-remote': { status: 0, stdout: '', stderr: '' },
   });
-  runRelease({ cwd: 'C:\\repo', type: 'patch', spawn, log: () => {} });
+  release({ cwd: 'C:\\repo', type: 'patch', spawn });
 
   const push = spawn.calls.find((c) => c.startsWith('git push'));
   assert.match(push, /refs\/tags\/v1\.4\.0/);
@@ -70,7 +83,7 @@ test('ref tag memakai garis miring biasa, juga di Windows', () => {
 
 test('tipe rilis tidak sah ditolak sebelum standard-version jalan', () => {
   const spawn = fakeSpawn({});
-  const result = runRelease({ cwd: '/repo', type: 'v1', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'v1', spawn });
 
   assert.equal(result.ok, false);
   assert.equal(spawn.calls.length, 0, 'tidak boleh menjalankan perintah apa pun');
@@ -80,13 +93,13 @@ test('tipe rilis tidak sah ditolak sebelum standard-version jalan', () => {
 
 test('standard-version dijalankan lewat process.execPath dan cli yang terpasang', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     'ls-remote': { status: 0, stdout: '9f1c2ab4d5e6\trefs/tags/v1.4.0\n', stderr: '' },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, true);
-  const first = spawn.invocations[0];
+  const first = standardVersionInvocation(spawn);
+  assert.ok(first, `standard-version harus dijalankan, dapat: ${spawn.calls.join(' | ')}`);
   assert.equal(first.cmd, process.execPath, 'harus memakai process.execPath, bukan npx');
   assert.equal(first.args[0], STANDARD_VERSION_CLI, 'argumen pertama harus cli standard-version');
   assert.deepEqual(first.args.slice(1), ['--release-as', 'patch']);
@@ -100,11 +113,10 @@ test('standard-version dijalankan lewat process.execPath dan cli yang terpasang'
 
 test('standard-version yang tidak terpasang dilaporkan tanpa menjalankan perintah', () => {
   const spawn = fakeSpawn({});
-  const result = runRelease({
+  const result = release({
     cwd: '/repo',
     type: 'patch',
     spawn,
-    log: () => {},
     resolveStandardVersion: () => null,
   });
 
@@ -117,11 +129,14 @@ test('status null dari spawn dianggap gagal, bukan sukses', () => {
   const spawn = fakeSpawn({
     '--release-as': { status: null, stdout: '', stderr: '' },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, false);
   assert.match(result.reason, /gagal/i);
-  assert.equal(spawn.calls.length, 1, 'tidak boleh lanjut ke git setelah standard-version gagal');
+  assert.ok(
+    !spawn.calls.some((c) => c.startsWith('git push')),
+    'tidak boleh lanjut ke git setelah standard-version gagal'
+  );
 });
 
 test('error spawn (ENOENT) dianggap gagal dan dilaporkan', () => {
@@ -133,7 +148,7 @@ test('error spawn (ENOENT) dianggap gagal dan dilaporkan', () => {
       error: new Error('spawnSync npx ENOENT'),
     },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, false);
   assert.match(result.reason, /ENOENT/);
@@ -141,14 +156,13 @@ test('error spawn (ENOENT) dianggap gagal dan dilaporkan', () => {
 
 test('stdout berupa Buffer dari spawn tetap terbaca', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: Buffer.from('v1.4.0\n'), stderr: Buffer.alloc(0) },
     'ls-remote': {
       status: 0,
       stdout: Buffer.from('9f1c2ab4d5e6\trefs/tags/v1.4.0\n'),
       stderr: Buffer.alloc(0),
     },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, true);
   assert.equal(result.tag, 'v1.4.0');
@@ -158,10 +172,9 @@ test('stdout berupa Buffer dari spawn tetap terbaca', () => {
 
 test('push ditolak menghapus tag lokal dan membatalkan commit rilis', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     'refs/tags/v1.4.0': { status: 1, stdout: '', stderr: '! [rejected] already exists' },
   });
-  const result = runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  const result = release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.equal(result.ok, false);
   assert.ok(
@@ -183,10 +196,9 @@ test('push ditolak menghapus tag lokal dan membatalkan commit rilis', () => {
 
 test('setiap perintah membawa cwd eksplisit', () => {
   const spawn = fakeSpawn({
-    'describe': { status: 0, stdout: 'v1.4.0\n', stderr: '' },
     'ls-remote': { status: 0, stdout: '9f1c2ab4d5e6\trefs/tags/v1.4.0\n', stderr: '' },
   });
-  runRelease({ cwd: '/repo', type: 'patch', spawn, log: () => {} });
+  release({ cwd: '/repo', type: 'patch', spawn });
 
   assert.ok(spawn.invocations.length > 0, 'harus ada perintah yang dijalankan');
   for (const invocation of spawn.invocations) {
