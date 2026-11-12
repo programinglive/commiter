@@ -48,12 +48,17 @@ function runReleaseCommand(argv = []) {
   const result = runRelease({ cwd: process.cwd(), type, extraArgs });
 
   if (!result.ok) {
-    console.error(`❌ Release gagal: ${result.reason}`);
+    console.error(`❌ Release gagal [${result.state}]: ${result.reason}`);
     process.exitCode = 1;
     return result;
   }
 
-  console.log(`✅ Rilis ${result.tag} selesai dan tag sudah ada di origin.`);
+  if (result.dryRun) {
+    console.log(`PLAN ONLY: ${result.tag} (tidak ada perubahan)`);
+    return result;
+  }
+
+  console.log(`✅ Rilis ${result.tag} selesai; commit branch dan annotated tag diverifikasi di origin.`);
   return result;
 }
 
@@ -125,11 +130,11 @@ function setupCommiter() {
     packageJson.scripts = ensureSafeTestScript(packageJson.scripts || {});
     // Add scripts
     packageJson.scripts.prepare = 'husky';
-    packageJson.scripts.release = 'node scripts/release.cjs';
-    packageJson.scripts['release:major'] = 'node scripts/release.cjs major';
-    packageJson.scripts['release:minor'] = 'node scripts/release.cjs minor';
-    packageJson.scripts['release:patch'] = 'node scripts/release.cjs patch';
-    packageJson.scripts['release:first'] = 'node scripts/release.cjs --first-release';
+    packageJson.scripts.release = 'commiter release';
+    packageJson.scripts['release:major'] = 'commiter release major';
+    packageJson.scripts['release:minor'] = 'commiter release minor';
+    packageJson.scripts['release:patch'] = 'commiter release patch';
+    packageJson.scripts['release:first'] = 'commiter release --first-release';
 
     // Add standard-version config
     packageJson['standard-version'] = {
