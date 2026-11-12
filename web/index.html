@@ -66,7 +66,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    <span>v1.4.0 - Latest Release</span>
+                    <span>v1.5.0 - Latest Release</span>
                 </div>
                 <h1 class="hero-title">
                     Ship Releases with <span class="gradient-text">Confidence</span>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <div class="stat-value">1.4.0</div>
+                        <div class="stat-value">1.5.0</div>
                         <div class="stat-label">Latest Version</div>
                     </div>
                     <div class="stat-item">
@@ -119,11 +119,11 @@
                         <div class="code-line output">✓ Configuring Husky hooks...</div>
                         <div class="code-line output">✓ Setting up commitlint...</div>
                         <div class="code-line output success">🎉 Setup complete! Ready to release.</div>
-                        <div class="code-line"><span class="prompt">$</span> npm run release:minor</div>
+                        <div class="code-line"><span class="prompt">$</span> npx @programinglive/commiter release minor</div>
                         <div class="code-line output">✓ Running tests...</div>
-                        <div class="code-line output">✓ Bumping version to 1.4.0...</div>
+                        <div class="code-line output">✓ Bumping version to 1.5.0...</div>
                         <div class="code-line output">✓ Updating CHANGELOG.md...</div>
-                        <div class="code-line output success">🚀 Release v1.4.0 ready!</div>
+                        <div class="code-line output success">🚀 Release v1.5.0 published (branch + tag verified)</div>
                         <div class="code-line cursor">_</div>
                     </div>
                 </div>
@@ -169,8 +169,8 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎯</div>
-                    <h3>Enhanced Release Process</h3>
-                    <p>Clear console guidance and optional auto-commit for release notes with AI-friendly workflow</p>
+                    <h3>Atomic Publication</h3>
+                    <p>One commit and one annotated tag, pushed together with <code>git push --atomic</code> and verified by object ID</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
@@ -289,7 +289,7 @@
                             <code>npm run release        # Standard release with git guidance</code>
                         </div>
                         <div class="code-block">
-                            <code>npm run release:first   # New project → 0.0.1</code>
+                            <code>npm run release:first   # New project from 0.0.0 → 0.0.1</code>
                         </div>
                         <div class="code-block">
                             <code>npm run release:patch  # 1.0.0 → 1.0.1</code>
@@ -303,7 +303,7 @@
                         <div class="code-block">
                             <code>npm run release:complete  # Auto-commit & push release notes</code>
                         </div>
-                        <p style="margin-top:1.25rem;">Or let the package run the whole release, including the tag push:</p>
+                        <p style="margin-top:1.25rem;">Or let the package run the whole release, including the atomic branch + tag push:</p>
                         <div class="code-block">
                             <code>npx @programinglive/commiter release         # patch</code>
                         </div>
@@ -315,14 +315,14 @@
                         </div>
                         <p style="margin-top:1.25rem;">One command, and it stops at the first failure:</p>
                         <ul style="margin:0.75rem 0 0 1.25rem;line-height:1.9;">
-                            <li>refuses to run on a dirty working tree</li>
-                            <li>runs your test script before touching anything</li>
-                            <li>bumps the version and writes the changelog</li>
-                            <li>updates the release notes and the README version line</li>
-                            <li>amends the release commit and moves the tag onto it</li>
-                            <li>pushes <strong>only</strong> <code>refs/tags/&lt;tag&gt;</code> and proves it arrived</li>
+                            <li>refuses to run on a dirty tree, the wrong branch, or a stale clone</li>
+                            <li>predicts the version and refuses a tag that already exists</li>
+                            <li>generates the version bump, changelog, notes, and README line</li>
+                            <li>runs your test script on the final tree</li>
+                            <li>creates exactly one commit and one annotated tag</li>
+                            <li>pushes both with <code>git push --atomic</code> and compares the remote object IDs</li>
                         </ul>
-                        <p style="margin-top:1rem;">If the tag already exists — two people releasing at once — it fails loudly, removes the local tag and undoes the release commit. It never leaves a version commit behind without a tag, because that is how a release disappears silently.</p>
+                        <p style="margin-top:1rem;">If the push is rejected, the local commit is rolled back with <code>--mixed</code> and the generated files are kept. If the remote cannot be read afterwards, the state is <code>UNKNOWN</code> and the tool tells you not to retry. It never leaves a version commit behind without a tag, because that is how a release disappears silently.</p>
                     </div>
                 </div>
             </div>
@@ -424,6 +424,12 @@
                 <!-- RELEASES_TIMELINE:START -->
                 <div class="release-item">
                     <div class="release-badge">Latest</div>
+                    <div class="release-version">v1.5.0</div>
+                    <div class="release-date">November 12, 2026</div>
+                    <div class="release-type">✨ Features</div>
+                    <p class="release-description">Release v2: one commit and one annotated tag, published with a single atomic push and verified by object ID. Fixes the four audit findings and adds concurrency and per-phase failure tests.</p>
+                </div>
+                <div class="release-item">
                     <div class="release-version">v1.4.0</div>
                     <div class="release-date">November 12, 2026</div>
                     <div class="release-type">✨ Features</div>
