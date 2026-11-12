@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Point all eight consumer repositories at `commiter release` (engine 1.5.0) and remove their local `scripts/release.cjs`, without touching uncommitted work.
+**Goal:** Point all eight consumer repositories at `commiter release` (engine 1.5.1) and remove their local `scripts/release.cjs`, without touching uncommitted work.
 
-**Architecture:** Each repo gets one branch, one commit, one MR. The commit adds `commiter.release.branch`, rewrites the `release*` npm scripts to `commiter release`, installs `@programinglive/commiter@1.5.0`, and deletes `scripts/release.cjs`. Repos with uncommitted work are migrated in a git worktree cut from `origin/<default>`, so the operator's working tree is never touched.
+**Architecture:** Each repo gets one branch, one commit, one MR. The commit adds `commiter.release.branch`, rewrites the `release*` npm scripts to `commiter release`, installs `@programinglive/commiter@1.5.1`, and deletes `scripts/release.cjs`. Repos with uncommitted work are migrated in a git worktree cut from `origin/<default>`, so the operator's working tree is never touched.
 
 **Tech Stack:** Node 18+, npm, git worktrees, GitLab/GitHub MRs.
 
@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Engine version is `@programinglive/commiter@1.5.0` (published, `gitHead` `b5c8ade`).
+- Engine version is `@programinglive/commiter@1.5.1` (published, `gitHead` `0d58b4c`).
 - Default branch per repo: `master` for clinic, belajar, mgm, reseller, erp; `main` for programinglive, zettly, hris.
 - `commiter.release.branch` must equal the repo's default branch.
 - Never commit or push another session's uncommitted work. Dirty repos are migrated in a worktree from `origin/<default>`.
@@ -37,7 +37,7 @@
 - Delete: `D:\code\mgm.beautyworld.co.id\scripts\release.cjs`
 
 **Interfaces:**
-- Consumes: `commiter release` from `@programinglive/commiter@1.5.0`
+- Consumes: `commiter release` from `@programinglive/commiter@1.5.1`
 - Produces: the exact package.json shape every later task copies
 
 - [ ] **Step 1: Branch from the default branch**
@@ -63,7 +63,7 @@ Add `commiter.release.branch = "master"` and set:
 - [ ] **Step 3: Install the engine and remove the local script**
 
 ```bash
-npm install --save-dev @programinglive/commiter@1.5.0
+npm install --save-dev @programinglive/commiter@1.5.1
 git rm scripts/release.cjs
 ```
 
@@ -75,7 +75,7 @@ npm ls @programinglive/commiter
 node -e "require('@programinglive/commiter/lib/release')"
 ```
 
-Expected: `bersih`, `@programinglive/commiter@1.5.0`, and no error.
+Expected: `bersih`, `@programinglive/commiter@1.5.1`, and no error.
 
 - [ ] **Step 5: Commit, push, MR, merge**
 
@@ -101,7 +101,7 @@ Expected: `PLAN ONLY: v<next>` and `git status --porcelain` empty.
 Same steps as Task 1, in `D:\code\reseller.beautyworld.co.id`, branch `chore/adopt-commiter-release-v2`, `commiter.release.branch = "master"`.
 
 - [ ] **Step 1: Branch, rewrite package.json, install, remove the script**
-- [ ] **Step 2: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
+- [ ] **Step 2: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1
 - [ ] **Step 3: Commit, push, MR, merge, dry-run on master**
 
 ---
@@ -111,7 +111,7 @@ Same steps as Task 1, in `D:\code\reseller.beautyworld.co.id`, branch `chore/ado
 Same steps as Task 1, in `D:\code\programinglive`, branch `chore/adopt-commiter-release-v2`, `commiter.release.branch = "main"`.
 
 - [ ] **Step 1: Branch, rewrite package.json, install, remove the script**
-- [ ] **Step 2: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
+- [ ] **Step 2: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1
 - [ ] **Step 3: Commit, push, MR, merge, dry-run on main**
 
 ---
@@ -121,8 +121,16 @@ Same steps as Task 1, in `D:\code\programinglive`, branch `chore/adopt-commiter-
 Same steps as Task 1, in `D:\code\erp.beautyworld.co.id`, branch `chore/adopt-commiter-release-v2`, `commiter.release.branch = "master"`.
 
 - [ ] **Step 1: Branch, rewrite package.json, install, remove the script**
-- [ ] **Step 2: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
-- [ ] **Step 3: Commit, push, MR, merge, dry-run on master**
+- [ ] **Step 2: Replace the two PHP tests that pin the v1 script**
+
+`tests/Feature/ReleasePushesTagsTest.php` and `tests/Feature/ReleaseScriptArgsTest.php`
+read and execute `scripts/release.cjs`. Replace both with
+`tests/Feature/ReleaseContractTest.php`, which asserts the v2 contract: no local
+script, `scripts.release` is `commiter release`, `commiter.release.branch` is
+`master`, and the installed commiter version is at least 1.5.0.
+
+- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1, `php artisan test --filter=ReleaseContractTest` passes
+- [ ] **Step 4: Commit, push, MR, merge, dry-run on master**
 
 ---
 
@@ -140,7 +148,7 @@ git worktree add ../clinic-wt-release-v2 -b chore/adopt-commiter-release-v2 orig
 ```
 
 - [ ] **Step 2: Rewrite package.json, install, remove the script** (same values as Task 1)
-- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
+- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1
 - [ ] **Step 4: Commit, push, MR, merge, dry-run on master**
 - [ ] **Step 5: Remove the worktree**
 
@@ -158,7 +166,7 @@ git worktree remove ../clinic-wt-release-v2
 
 - [ ] **Step 1: Create the worktree from origin/master**
 - [ ] **Step 2: Rewrite package.json, install with `--save` (not `--save-dev`), remove the script**
-- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
+- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1
 - [ ] **Step 4: Commit, push, MR, merge, dry-run on master**
 - [ ] **Step 5: Remove the worktree**
 
@@ -172,7 +180,7 @@ git worktree remove ../clinic-wt-release-v2
 
 - [ ] **Step 1: Create the worktree from origin/main**
 - [ ] **Step 2: Rewrite package.json, install, remove the script**
-- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
+- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1
 - [ ] **Step 4: Commit, push, MR, merge, dry-run on main**
 - [ ] **Step 5: Remove the worktree**
 
@@ -186,7 +194,7 @@ git worktree remove ../clinic-wt-release-v2
 
 - [ ] **Step 1: Create the worktree from origin/main**
 - [ ] **Step 2: Rewrite package.json, install, remove the script**
-- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.0
+- [ ] **Step 3: Verify** — `git grep -n "scripts/release"` clean, `npm ls` shows 1.5.1
 - [ ] **Step 4: Commit, push, MR, merge, dry-run on main**
 - [ ] **Step 5: Remove the worktree**
 
@@ -199,7 +207,7 @@ git worktree remove ../clinic-wt-release-v2
 
 - [ ] **Step 1: Write the failing test**
 
-The test fails when a repo has `scripts/release.cjs`, when `scripts.release` is not `commiter release`, or when the installed commiter version is below 1.5.0.
+The test fails when a repo has `scripts/release.cjs`, when `scripts.release` is not `commiter release`, or when the installed commiter version is below 1.5.1.
 
 - [ ] **Step 2: Prove it can fail** by restoring one local copy temporarily.
 
@@ -212,7 +220,7 @@ The test fails when a repo has `scripts/release.cjs`, when `scripts.release` is 
 | Case | Passes when |
 |---|---|
 | Every repo | `git grep -n "scripts/release"` prints nothing |
-| Every repo | `npm ls @programinglive/commiter` shows 1.5.0 |
+| Every repo | `npm ls @programinglive/commiter` shows 1.5.1 |
 | Every repo | `npx commiter release --dry-run` prints `PLAN ONLY` and mutates nothing |
 | Dirty repos | The operator's original working tree is unchanged |
 | Regression guard | Fails when a local `scripts/release.cjs` is restored, passes when removed |
