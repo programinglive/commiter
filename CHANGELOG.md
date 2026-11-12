@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/programinglive/commiter/compare/v1.4.0...v1.5.0) (2026-11-12)
+
+
+### 👷 Continuous Integration
+
+* **release:** create the GitHub Release and deploy the site from one tag ([#1](https://github.com/programinglive/commiter/issues/1)) ([ecaa6a6](https://github.com/programinglive/commiter/commit/ecaa6a68a9218eb47d5878abe0dc7e549a40c195))
+* **release:** skip npm publish when the version already exists ([#2](https://github.com/programinglive/commiter/issues/2)) ([0086d9b](https://github.com/programinglive/commiter/commit/0086d9b9f03aa8debae2e83195da5f4cd4416086))
+
+
+### 🐛 Bug Fixes
+
+* **release:** gate every release and keep the tag annotated ([584299e](https://github.com/programinglive/commiter/commit/584299e7504b127858ef04fd2fb3db4fa40fdcae))
+
+
+### ✨ Features
+
+* **release:** adopt the v2 engine with atomic publication ([91fcd59](https://github.com/programinglive/commiter/commit/91fcd59f3fe1cb889dc8dd9ed4099d98bd519c3d))
+
+
+### ✅ Tests
+
+* **release:** prove concurrency and per-phase failure handling ([4cfc0d4](https://github.com/programinglive/commiter/commit/4cfc0d4408fe631a89734b5102099bd4cbe1ab2f))
+
+
+### 📝 Documentation
+
+* audit the release v2 overlay before adopting it ([#5](https://github.com/programinglive/commiter/issues/5)) ([57c84b1](https://github.com/programinglive/commiter/commit/57c84b14740631a3c36be6ae58508afee2294cb3))
+* compact session handover and the plan to adopt release v2 ([#6](https://github.com/programinglive/commiter/issues/6)) ([639d9c0](https://github.com/programinglive/commiter/commit/639d9c08ce71490fcb662a31cab655d8bfa2d143))
+* explain how commiter works, and correct the README ([#4](https://github.com/programinglive/commiter/issues/4)) ([1479737](https://github.com/programinglive/commiter/commit/1479737dc3ffd28bdcada78f51f8e0b7030c6e1a))
+* **release:** describe the v2 flow and the recovery path ([fc7ac39](https://github.com/programinglive/commiter/commit/fc7ac39109d64e1fd143a024eb1178cd88e77170))
+* **web:** show 1.4.0 and document the release command ([#3](https://github.com/programinglive/commiter/issues/3)) ([2cbefe6](https://github.com/programinglive/commiter/commit/2cbefe6fc803fb0c6d5d7496d11744166be1827d))
+
 ## [1.4.0](https://github.com/programinglive/commiter/compare/v1.3.0...v1.4.0) (2026-11-12)
 
 

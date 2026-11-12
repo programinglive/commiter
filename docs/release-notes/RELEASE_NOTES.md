@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.5.0 | 2026-11-12 | **release:** create the GitHub Release and deploy the site from one tag (#1) (ecaa6a6) |
 | 1.3.0 | 2026-11-06 | enforce test cases presence and execution before commit in pre-commit hook (5867720) |
 | 1.2.20 | 2026-01-01 | update release notes for v1.2.19 📋 (87759c1) |
 | 1.2.19 | 2026-01-01 | finalize v1.2.18 release notes and website update (034faa5) |
@@ -83,6 +84,22 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.5.0
+
+Released on **2026-11-12**.
+
+- **release:** create the GitHub Release and deploy the site from one tag (#1) (ecaa6a6)
+- **release:** skip npm publish when the version already exists (#2) (0086d9b)
+- **release:** gate every release and keep the tag annotated (584299e)
+- **release:** adopt the v2 engine with atomic publication (91fcd59)
+- **release:** prove concurrency and per-phase failure handling (4cfc0d4)
+- audit the release v2 overlay before adopting it (#5) (57c84b1)
+- compact session handover and the plan to adopt release v2 (#6) (639d9c0)
+- explain how commiter works, and correct the README (#4) (1479737)
+- **release:** describe the v2 flow and the recovery path (fc7ac39)
+- **web:** show 1.4.0 and document the release command (#3) (2cbefe6)
 
 ## 1.3.0
 
