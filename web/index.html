@@ -66,7 +66,7 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    <span>v1.3.0 - Latest Release</span>
+                    <span>v1.4.0 - Latest Release</span>
                 </div>
                 <h1 class="hero-title">
                     Ship Releases with <span class="gradient-text">Confidence</span>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <div class="stat-value">1.3.0</div>
+                        <div class="stat-value">1.4.0</div>
                         <div class="stat-label">Latest Version</div>
                     </div>
                     <div class="stat-item">
@@ -121,9 +121,9 @@
                         <div class="code-line output success">🎉 Setup complete! Ready to release.</div>
                         <div class="code-line"><span class="prompt">$</span> npm run release:minor</div>
                         <div class="code-line output">✓ Running tests...</div>
-                        <div class="code-line output">✓ Bumping version to 1.3.0...</div>
+                        <div class="code-line output">✓ Bumping version to 1.4.0...</div>
                         <div class="code-line output">✓ Updating CHANGELOG.md...</div>
-                        <div class="code-line output success">🚀 Release v1.3.0 ready!</div>
+                        <div class="code-line output success">🚀 Release v1.4.0 ready!</div>
                         <div class="code-line cursor">_</div>
                     </div>
                 </div>
@@ -303,6 +303,26 @@
                         <div class="code-block">
                             <code>npm run release:complete  # Auto-commit & push release notes</code>
                         </div>
+                        <p style="margin-top:1.25rem;">Or let the package run the whole release, including the tag push:</p>
+                        <div class="code-block">
+                            <code>npx @programinglive/commiter release         # patch</code>
+                        </div>
+                        <div class="code-block">
+                            <code>npx @programinglive/commiter release minor   # 1.0.0 → 1.1.0</code>
+                        </div>
+                        <div class="code-block">
+                            <code>npx @programinglive/commiter release major   # 1.0.0 → 2.0.0</code>
+                        </div>
+                        <p style="margin-top:1.25rem;">One command, and it stops at the first failure:</p>
+                        <ul style="margin:0.75rem 0 0 1.25rem;line-height:1.9;">
+                            <li>refuses to run on a dirty working tree</li>
+                            <li>runs your test script before touching anything</li>
+                            <li>bumps the version and writes the changelog</li>
+                            <li>updates the release notes and the README version line</li>
+                            <li>amends the release commit and moves the tag onto it</li>
+                            <li>pushes <strong>only</strong> <code>refs/tags/&lt;tag&gt;</code> and proves it arrived</li>
+                        </ul>
+                        <p style="margin-top:1rem;">If the tag already exists — two people releasing at once — it fails loudly, removes the local tag and undoes the release commit. It never leaves a version commit behind without a tag, because that is how a release disappears silently.</p>
                     </div>
                 </div>
             </div>
@@ -404,6 +424,12 @@
                 <!-- RELEASES_TIMELINE:START -->
                 <div class="release-item">
                     <div class="release-badge">Latest</div>
+                    <div class="release-version">v1.4.0</div>
+                    <div class="release-date">November 12, 2026</div>
+                    <div class="release-type">✨ Features</div>
+                    <p class="release-description">One release command that pushes the tag and proves it reached origin, with a hard failure when the tag already exists.</p>
+                </div>
+                <div class="release-item">
                     <div class="release-version">v1.3.0</div>
                     <div class="release-date">November 06, 2026</div>
                     <div class="release-type">✨ Features</div>
