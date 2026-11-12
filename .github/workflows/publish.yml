@@ -48,11 +48,22 @@ jobs:
       - run: npm test
 
       # Publikasi memakai OIDC + provenance, jadi tidak ada token npm yang
-      # disimpan sebagai secret. Kalau tag ini sudah terbit, langkah ini gagal
-      # dengan "cannot publish over the previously published versions" — itu
-      # benar: rilis ulang tidak boleh menimpa versi yang sudah ada.
-      - name: Publish to npm
-        run: npm publish --provenance --access public
+      # disimpan sebagai secret.
+      #
+      # Versi yang sudah ada di registry dilewati, bukan digagalkan. Tanpa ini,
+      # merilis ulang sebuah tag (untuk membuat GitHub Release atau men-deploy
+      # situs yang tertinggal) mustahil: publish gagal lebih dulu, dan dua job
+      # lain yang bergantung padanya tidak pernah berjalan.
+      - name: Publish to npm unless the version already exists
+        env:
+          TAG: ${{ github.event.inputs.tag || github.ref_name }}
+        run: |
+          VERSION="${TAG#v}"
+          if npm view "@programinglive/commiter@${VERSION}" version >/dev/null 2>&1; then
+            echo "versi ${VERSION} sudah ada di npm; publikasi dilewati"
+            exit 0
+          fi
+          npm publish --provenance --access public
 
   github-release:
     name: Create the GitHub Release
