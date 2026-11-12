@@ -21,11 +21,14 @@ npx @programinglive/commiter release major
 One command does all of this, and stops at the first failure:
 
 1. refuses to run on a dirty working tree
-2. runs the project's test script
-3. bumps the version and writes the changelog
-4. updates `docs/release-notes/RELEASE_NOTES.md` and the README version line
-5. amends the release commit and moves the tag onto it
-6. pushes **only** `refs/tags/<tag>` and proves it arrived with `ls-remote`
+2. runs the project's test script (`npm test`, or `commiter.release.verify` when
+   set) and cancels the release if it fails — there is no bypass, a repository
+   without a `test` script simply fails the gate
+3. re-checks the working tree and cancels if the tests left changes behind
+4. bumps the version and writes the changelog
+5. updates `docs/release-notes/RELEASE_NOTES.md` and the README version line
+6. amends the release commit and moves the tag onto it, keeping it annotated
+7. pushes **only** `refs/tags/<tag>` and proves it arrived with `ls-remote`
 
 If the tag already exists — two people releasing at once — the command fails
 loudly, removes the local tag, and undoes the release commit. It never leaves a

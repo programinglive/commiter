@@ -7,15 +7,36 @@ const RELEASE_NOTES_PATH = 'docs/release-notes/RELEASE_NOTES.md';
 function fakeSpawn(responses) {
   const calls = [];
   const invocations = [];
+  const queues = {};
   const spawn = (cmd, args, opts) => {
     calls.push([cmd, ...args].join(' '));
     invocations.push({ cmd, args, opts });
     const key = [cmd, ...args].find((a) => typeof a === 'string' && responses[a] !== undefined);
-    return responses[key] ?? { status: 0, stdout: '', stderr: '' };
+
+    if (key === undefined) {
+      return { status: 0, stdout: '', stderr: '' };
+    }
+
+    const response = responses[key];
+
+    if (!Array.isArray(response)) {
+      return response;
+    }
+
+    // An array is a queue: the nth call for this key gets the nth entry, and the
+    // last entry repeats so a longer flow still has a defined answer.
+    queues[key] = (queues[key] || 0) + 1;
+    return response[Math.min(queues[key] - 1, response.length - 1)];
   };
   spawn.calls = calls;
   spawn.invocations = invocations;
   return spawn;
+}
+
+function tagMoveInvocation(spawn) {
+  return spawn.invocations.find(
+    (invocation) => invocation.cmd === 'git' && invocation.args[0] === 'tag' && invocation.args.includes('-a')
+  );
 }
 
 function packageJson(overrides = {}) {
@@ -182,6 +203,58 @@ test('gerbang uji yang gagal membatalkan rilis tanpa push', () => {
   assert.ok(!spawn.calls.some((call) => call.startsWith('git push')));
 });
 
+test('gerbang uji yang mengotori pohon kerja membatalkan rilis sebelum standard-version', () => {
+  const spawn = fakeSpawn(
+    happyPath({
+      '--porcelain': [
+        { status: 0, stdout: '', stderr: '' },
+        { status: 0, stdout: ' M package-lock.json\n', stderr: '' },
+      ],
+    })
+  );
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson(),
+    updateNotes: () => false,
+    syncReadme: () => false,
+  });
+
+  assert.equal(result.ok, false);
+  assert.match(result.reason, /gerbang uji/i);
+  assert.match(result.reason, /meninggalkan perubahan/i);
+  assert.equal(standardVersionInvocation(spawn), undefined, 'standard-version tidak boleh jalan');
+  assert.ok(!spawn.calls.includes('git commit --amend --no-edit'), 'tidak boleh ada commit');
+  assert.ok(!spawn.calls.some((call) => call.startsWith('git push')));
+});
+
+test('pohon kerja diperiksa ulang setelah gerbang uji, sebelum standard-version', () => {
+  const spawn = fakeSpawn(happyPath());
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson(),
+    updateNotes: () => false,
+    syncReadme: () => false,
+  });
+
+  assert.equal(result.ok, true);
+  const statusCalls = spawn.calls.filter((call) => call === 'git status --porcelain');
+  assert.equal(statusCalls.length, 2, `dapat: ${spawn.calls.join(' | ')}`);
+  const secondStatus = spawn.calls.lastIndexOf('git status --porcelain');
+  const verifyIndex = spawn.calls.indexOf('npm test');
+  const releaseIndex = spawn.invocations.findIndex(
+    (invocation) => invocation.cmd === process.execPath
+  );
+  assert.ok(secondStatus > verifyIndex, 'pemeriksaan ulang harus setelah gerbang uji');
+  assert.ok(
+    releaseIndex >= 0 && spawn.calls.slice(0, releaseIndex).length > secondStatus,
+    'pemeriksaan ulang harus sebelum standard-version'
+  );
+});
+
 test('commiter.release.verify dipakai menggantikan npm test', () => {
   const spawn = fakeSpawn(happyPath({ 'npm run verify': { status: 0, stdout: '', stderr: '' } }));
   const result = runRelease({
@@ -198,7 +271,7 @@ test('commiter.release.verify dipakai menggantikan npm test', () => {
   assert.ok(!spawn.calls.includes('npm test'), 'npm test tidak boleh dipakai bila verify disetel');
 });
 
-test('repo tanpa skrip test melewati gerbang uji', () => {
+test('repo tanpa skrip test tetap menjalankan npm test', () => {
   const spawn = fakeSpawn(happyPath());
   const result = runRelease({
     cwd: '/repo',
@@ -210,11 +283,35 @@ test('repo tanpa skrip test melewati gerbang uji', () => {
   });
 
   assert.equal(result.ok, true);
-  assert.ok(!spawn.calls.includes('npm test'), `dapat: ${spawn.calls.join(' | ')}`);
+  assert.ok(spawn.calls.includes('npm test'), `dapat: ${spawn.calls.join(' | ')}`);
 });
 
-test('skrip test bawaan npm yang selalu gagal tidak dijalankan', () => {
-  const spawn = fakeSpawn(happyPath());
+test('repo tanpa skrip test membatalkan rilis bila npm test gagal', () => {
+  const spawn = fakeSpawn(
+    happyPath({ 'npm test': { status: 1, stdout: '', stderr: 'Missing script: "test"' } })
+  );
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson({ scripts: {} }),
+    updateNotes: () => false,
+    syncReadme: () => false,
+  });
+
+  assert.equal(result.ok, false);
+  assert.match(result.reason, /gerbang uji/i);
+  assert.equal(standardVersionInvocation(spawn), undefined, 'standard-version tidak boleh jalan');
+  assert.ok(!spawn.calls.includes('git commit --amend --no-edit'), 'tidak boleh ada commit');
+  assert.ok(!spawn.calls.some((call) => call.startsWith('git push')));
+});
+
+test('skrip test bawaan npm tetap dijalankan dan kegagalannya membatalkan rilis', () => {
+  const spawn = fakeSpawn(
+    happyPath({
+      'npm test': { status: 1, stdout: '', stderr: 'Error: no test specified' }
+    })
+  );
   const result = runRelease({
     cwd: '/repo',
     spawn,
@@ -225,8 +322,9 @@ test('skrip test bawaan npm yang selalu gagal tidak dijalankan', () => {
     syncReadme: () => false,
   });
 
-  assert.equal(result.ok, true);
-  assert.ok(!spawn.calls.includes('npm test'), `dapat: ${spawn.calls.join(' | ')}`);
+  assert.ok(spawn.calls.includes('npm test'), `dapat: ${spawn.calls.join(' | ')}`);
+  assert.equal(result.ok, false);
+  assert.equal(standardVersionInvocation(spawn), undefined, 'standard-version tidak boleh jalan');
 });
 
 test('release notes tanpa tabel tidak menggagalkan rilis', () => {
@@ -354,14 +452,102 @@ test('release notes dan README sama-sama masuk ke commit rilis', () => {
   const notesIndex = spawn.calls.indexOf(`git add ${RELEASE_NOTES_PATH}`);
   const readmeIndex = spawn.calls.indexOf('git add README.md');
   const amendIndex = spawn.calls.indexOf('git commit --amend --no-edit');
-  const tagIndex = spawn.calls.indexOf('git tag -f v1.4.0');
   const pushIndex = spawn.calls.findIndex((call) => call.startsWith('git push'));
 
   assert.ok(notesIndex >= 0, `dapat: ${spawn.calls.join(' | ')}`);
   assert.ok(readmeIndex > notesIndex, 'README di-stage setelah release notes');
   assert.ok(amendIndex > readmeIndex, 'amend setelah kedua berkas di-stage');
-  assert.ok(tagIndex > amendIndex, 'tag digeser setelah amend');
-  assert.ok(pushIndex > tagIndex, 'push setelah tag digeser');
+  const tagMove = spawn.calls.findIndex((call) => call.startsWith(`git tag -f -a ${result.tag}`));
+  assert.ok(tagMove > amendIndex, 'tag digeser setelah amend');
+  assert.ok(pushIndex > tagMove, 'push setelah tag digeser');
+});
+
+test('tag digeser sebagai tag annotated dengan pesan tag lama', () => {
+  const message = 'chore(release): 1.4.0 🚀';
+  const spawn = fakeSpawn(
+    happyPath({
+      '--cached': { status: 1, stdout: '', stderr: '' },
+      '--format=%(contents)': { status: 0, stdout: `${message}\n`, stderr: '' },
+    })
+  );
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson(),
+    updateNotes: () => false,
+    syncReadme: () => true,
+  });
+
+  assert.equal(result.ok, true);
+  const move = tagMoveInvocation(spawn);
+  assert.ok(move, `harus menggeser tag dengan -a, dapat: ${spawn.calls.join(' | ')}`);
+  assert.deepEqual(move.args.slice(0, 4), ['tag', '-f', '-a', 'v1.4.0']);
+  assert.ok(move.args.includes('-m'), `harus memakai -m, dapat: ${move.args.join(' ')}`);
+  assert.equal(move.args[move.args.indexOf('-m') + 1], message, 'pesan tag lama dipertahankan');
+});
+
+test('tag digeser dengan pesan bawaan bila tag lama tanpa anotasi', () => {
+  const spawn = fakeSpawn(
+    happyPath({
+      '--cached': { status: 1, stdout: '', stderr: '' },
+      '--format=%(contents)': { status: 0, stdout: '', stderr: '' },
+    })
+  );
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson(),
+    updateNotes: () => false,
+    syncReadme: () => true,
+  });
+
+  assert.equal(result.ok, true);
+  const move = tagMoveInvocation(spawn);
+  assert.ok(move, `harus menggeser tag dengan -a, dapat: ${spawn.calls.join(' | ')}`);
+  assert.equal(move.args[move.args.indexOf('-m') + 1], 'chore(release): 1.4.0');
+});
+
+test('amend tidak dipanggil ketika tidak ada perubahan ter-stage', () => {
+  const spawn = fakeSpawn(
+    happyPath({ '--cached': { status: 0, stdout: '', stderr: '' } })
+  );
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson(),
+    updateNotes: () => true,
+    syncReadme: () => true,
+  });
+
+  assert.equal(result.ok, true);
+  assert.ok(
+    !spawn.calls.includes('git commit --amend --no-edit'),
+    `amend tidak boleh dipanggil, dapat: ${spawn.calls.join(' | ')}`
+  );
+  assert.equal(tagMoveInvocation(spawn), undefined, 'tag tidak boleh digeser tanpa amend');
+});
+
+test('amend dipanggil ketika ada perubahan ter-stage', () => {
+  const spawn = fakeSpawn(
+    happyPath({ '--cached': { status: 1, stdout: '', stderr: '' } })
+  );
+  const result = runRelease({
+    cwd: '/repo',
+    spawn,
+    log: () => {},
+    readPackageJson: () => packageJson(),
+    updateNotes: () => false,
+    syncReadme: () => true,
+  });
+
+  assert.equal(result.ok, true);
+  assert.ok(
+    spawn.calls.includes('git commit --amend --no-edit'),
+    `amend harus dipanggil, dapat: ${spawn.calls.join(' | ')}`
+  );
 });
 
 // --- README version pattern ---
