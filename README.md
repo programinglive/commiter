@@ -20,20 +20,21 @@ npx @programinglive/commiter release major
 
 One command does all of this, and stops at the first failure:
 
-1. refuses to run on a dirty working tree
-2. runs the project's test script (`npm test`, or `commiter.release.verify` when
-   set) and cancels the release if it fails — there is no bypass, a repository
-   without a `test` script simply fails the gate
-3. re-checks the working tree and cancels if the tests left changes behind
-4. bumps the version and writes the changelog
-5. updates `docs/release-notes/RELEASE_NOTES.md` and the README version line
-6. amends the release commit and moves the tag onto it, keeping it annotated
-7. pushes **only** `refs/tags/<tag>` and proves it arrived with `ls-remote`
+1. refuses to run on a dirty working tree, the wrong branch, or a stale clone
+2. predicts the next version and refuses a tag that already exists
+3. generates the version bump, `CHANGELOG.md`, release notes, and README version
+   line — without creating a commit or tag
+4. runs the project's test script (`npm test`, or `commiter.release.verify` when
+   set) on the final tree and cancels the release if it fails — there is no
+   bypass, a repository without a `test` script simply fails the gate
+5. creates exactly **one** release commit and **one** annotated tag
+6. publishes both with a single `git push --atomic`, then compares the remote
+   object IDs with the local ones
 
-If the tag already exists — two people releasing at once — the command fails
-loudly, removes the local tag, and undoes the release commit. It never leaves a
-"version X" commit behind without a tag, because that is how a release silently
-disappears.
+If the push is rejected, the local commit is rolled back with `git reset --mixed`
+and the generated files are kept for inspection. If the remote cannot be read
+after a push, the state is `UNKNOWN` and the tool tells you not to retry. See
+[Release recovery](docs/RELEASE-RECOVERY.md).
 
 ## Features
 
@@ -136,40 +137,67 @@ release you cannot predict.
 
 It runs the whole release and stops at the first failure:
 
-1. refuses to run on a dirty working tree
-2. runs your test script (`npm test`, or `commiter.release.verify`)
-3. re-checks the working tree, because the test run itself can write files
-4. bumps the version, writes `CHANGELOG.md`, creates the release commit and an
-   annotated tag
-5. updates `docs/release-notes/RELEASE_NOTES.md` and the README version line
-6. amends the release commit and moves the tag onto it
-7. pushes **only** `refs/tags/<tag>` and proves it arrived with `ls-remote`
+1. refuses to run on a dirty working tree, on the wrong branch, or on a clone
+   that is behind the remote
+2. predicts the next version and refuses a tag that already exists
+3. runs `standard-version` for **file generation only** — version bump,
+   `CHANGELOG.md`, release notes, README version line
+4. stages only allowlisted files, then runs your test script
+   (`npm test`, or `commiter.release.verify`) on the final tree
+5. creates exactly **one** release commit and **one** annotated tag
+6. pushes the branch and the tag together with `git push --atomic`
+7. compares the remote object IDs with the local ones before reporting success
 
 ### When it fails
 
-| Situation | What happens |
-|---|---|
-| Dirty working tree | Stops before writing anything |
-| Tests fail | Stops before the version bump |
-| Tag already exists | Push rejected; local tag deleted, release commit undone, failure names the tag |
-| Remote unreachable | Fails; local tag and commit remain, and the message says so |
+| Situation | State | What happens |
+|---|---|---|
+| Dirty working tree | `FAILED` | Stops before writing anything |
+| Wrong branch or stale clone | `FAILED` | Stops before writing anything |
+| Tag already exists | `FAILED` | Stops before generation; no commit is created |
+| Tests fail | `FAILED` | Generated files are restored; the reason names the failing output |
+| Push rejected | `FAILED` | Local tag deleted, commit rolled back with `--mixed`, generated files kept |
+| Remote unreadable after push | `UNKNOWN` | Local commit and tag preserved; do not retry before inspecting |
 
 It never leaves a "version X" commit behind without a tag. That is how a release
 disappears silently: the commit looks released, the tag never arrived, and the
 next release bumps from a version nobody published.
 
-### Why the tag is pushed explicitly
+### Why branch and tag are pushed together
 
-`git push` sends the branch, not the tag. `git push --tags` would rewrite every
-legacy tag in the repository. So the tool pushes exactly one ref,
-`refs/tags/<tag>`, and then verifies it with `ls-remote` — because a push that
-reports success is not proof the tag exists on the remote.
+`git push` sends the branch, not the tag; `git push --tags` would rewrite every
+legacy tag in the repository. Publishing one without the other leaves a window
+that cannot be repaired automatically. So the tool publishes exactly two refs in
+a single atomic push, and then compares the remote object IDs — because a push
+that reports success is not proof the refs arrived, and a ref that exists is not
+proof it points at the release commit.
+
+### Why the version must be configured per repo
+
+The release branch defaults to `main`. A repository that releases from `master`
+— ERP, for example — must say so:
+
+```json
+{
+  "commiter": {
+    "release": {
+      "branch": "master"
+    }
+  }
+}
+```
+
+Without it the release fails with a message naming the expected and actual
+branch, before it writes anything.
 
 ### Full explanation
 
 The complete design — every step, every guarantee, the failure modes, the known
 limitations and the open questions — is in
-[`docs/HOW-IT-WORKS.md`](docs/HOW-IT-WORKS.md).
+[`docs/HOW-IT-WORKS.md`](docs/HOW-IT-WORKS.md). The operational contract is in
+[`docs/RELEASE-V2-OPERATIONS.md`](docs/RELEASE-V2-OPERATIONS.md), and the
+`UNKNOWN`/`MANUAL_RECOVERY` path is in
+[`docs/RELEASE-RECOVERY.md`](docs/RELEASE-RECOVERY.md).
 
 ## Pre-commit Hooks
 

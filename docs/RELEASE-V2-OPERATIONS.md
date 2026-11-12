@@ -55,6 +55,23 @@ Default `verify` is `npm test`. No skip flag or env bypass. `verify` runs after 
 
 Run on a dedicated branch first. Existing per-repo `scripts/release.cjs` files must no longer orchestrate their own release. Route npm release scripts to `commiter release`. Any repo whose release branch is not `main` must configure `commiter.release.branch`. Review `standard-version` config for custom bumpFiles, unusual prefixes, prerelease identifiers, lockfiles, and hooks. Run bare-remote integration tests covering a happy path, branch push reject, tag collision, concurrent patch/minor, network ambiguity, and hook failure. Do not release to production until these scenarios pass on each repository family.
 
-## Important limitations of this overlay
+## Breaking changes from 1.4.0
 
-This package is a source overlay built from the public upstream files; it has not been run against a full clone with installed standard-version dependencies. The included tests cover parser, semantic version prediction, README rewrite, dry-run and basic Git preflight, not a verified full end-to-end push. Dry-run uses built-in semver prediction; repositories using nondefault standard-version increment configurations must validate the version prediction against the generated version. No GitHub changes or publish operations were performed.
+1. **`commiter.release.branch` is required per repository.** The default is
+   `main`. A repository that releases from another branch (ERP uses `master`)
+   must configure it, or the release fails before writing anything.
+2. **`--first-release` is accepted only from version `0.0.0`.** 1.4.0 accepted it
+   from any version and produced `0.0.1`. The new rule is safer but stricter.
+3. **The release pushes the branch as well as the tag.** A protected branch that
+   forbids direct pushes will reject the release. Grant the release actor push
+   access or adapt branch protection; there is no unsafe fallback.
+4. **Every other `standard-version` flag is rejected.** Only `--dry-run` and
+   `--first-release` are accepted.
+
+## Status
+
+This engine is the adopted release path. It is covered by 54 tests, including
+real-git integration against local bare remotes, concurrency, and one injected
+failure per phase. It has not been published as a new npm version yet; the
+migration of the eight consumer repositories is tracked separately.
+
