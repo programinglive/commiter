@@ -114,6 +114,6 @@ test('two concurrent processes from the same parent: exactly one publishes', asy
   assert.equal(published.length, 1, `expected exactly one publisher, got ${JSON.stringify(results)}`);
   assert.equal(published[0].state, 'PUBLISHED');
   assert.equal(rejected.length, 1);
-  assert.ok(['FAILED', 'UNKNOWN'].includes(rejected[0].state), rejected[0].state);
+  assert.ok(['REJECTED', 'REJECTED_CONCURRENT_UPDATE', 'UNKNOWN'].includes(rejected[0].state), rejected[0].state);
   assert.match(rejected[0].reason, /origin|remote|Tag|not identical/i);
 });

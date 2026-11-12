@@ -122,7 +122,7 @@ test('push failure: a rejecting remote rolls back the commit, no fallback', (t) 
 
   const result = runRelease({ cwd, log: () => {} });
 
-  assert.equal(result.state, 'FAILED', result.reason);
+  assert.equal(result.state, 'REJECTED', result.reason);
   assert.equal(git(cwd, 'rev-parse', 'HEAD'), before);
   assert.equal(git(cwd, 'tag', '-l'), '');
   assert.equal(git(cwd, 'ls-remote', 'origin', 'refs/heads/main').split(/\s+/)[0], before);
@@ -136,7 +136,7 @@ test('atomic push rejection: the release fails instead of falling back', (t) => 
 
   const result = runRelease({ cwd, log: () => {} });
 
-  assert.equal(result.state, 'FAILED', result.reason);
+  assert.equal(result.state, 'REJECTED', result.reason);
   assert.match(result.reason, /Atomic push rejected|atomic/i);
   assert.equal(git(cwd, 'rev-parse', 'HEAD'), before);
   assert.equal(git(cwd, 'ls-remote', 'origin', 'refs/heads/main').split(/\s+/)[0], before);

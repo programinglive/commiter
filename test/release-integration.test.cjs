@@ -35,7 +35,7 @@ test('rejected atomic push rolls back commit while preserving generated files',t
  const hooks=path.join(origin,'hooks');
  fs.writeFileSync(path.join(hooks,'pre-receive'),'#!/bin/sh\nexit 1\n',{mode:0o755});
  const result=runRelease({cwd,log:()=>{}});
- assert.equal(result.ok,false);assert.equal(result.state,'FAILED',result.reason);
+ assert.equal(result.ok,false);assert.equal(result.state,'REJECTED',result.reason);
  assert.equal(git(cwd,'rev-parse','HEAD'),before);
  assert.equal(git(cwd,'tag','-l'),'');
  assert.equal(git(cwd,'ls-remote','origin','refs/tags/v1.0.1'),'');
