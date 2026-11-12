@@ -10,6 +10,51 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { runRelease, VALID_RELEASE_TYPES } = require('./lib/release');
+
+/**
+ * Split the arguments that follow `commiter release` into a release type and
+ * the flags standard-version should receive untouched.
+ *
+ * Only `patch`, `minor` and `major` are consumed as a type. A missing type
+ * stays `null` so standard-version decides the bump itself (patch by default).
+ * Every other token is forwarded verbatim, in its original order.
+ *
+ * @param {string[]} [argv] Raw arguments, usually `process.argv.slice(2)`.
+ * @returns {{ type: null | 'patch' | 'minor' | 'major', extraArgs: string[] }}
+ */
+function parseReleaseArgs(argv = []) {
+  const args = Array.isArray(argv) ? argv.slice() : [];
+  const rest = args[0] === 'release' ? args.slice(1) : args;
+  const candidate = rest[0];
+
+  if (typeof candidate === 'string' && VALID_RELEASE_TYPES.has(candidate)) {
+    return { type: candidate, extraArgs: rest.slice(1) };
+  }
+
+  return { type: null, extraArgs: rest };
+}
+
+/**
+ * Run the release flow from the CLI. Never calls `process.exit()`; on failure it
+ * records `process.exitCode = 1` so the caller can still finish its work.
+ *
+ * @param {string[]} argv Raw arguments, usually `process.argv.slice(2)`.
+ * @returns {{ ok: boolean, tag: string | null, reason: string | null }}
+ */
+function runReleaseCommand(argv = []) {
+  const { type, extraArgs } = parseReleaseArgs(argv);
+  const result = runRelease({ cwd: process.cwd(), type, extraArgs });
+
+  if (!result.ok) {
+    console.error(`❌ Release gagal: ${result.reason}`);
+    process.exitCode = 1;
+    return result;
+  }
+
+  console.log(`✅ Rilis ${result.tag} selesai dan tag sudah ada di origin.`);
+  return result;
+}
 
 function ensureSafeTestScript(scripts = {}) {
   const defaultFailingTestScript = 'echo "Error: no test specified" && exit 1';
@@ -38,6 +83,13 @@ function copyRecursiveSync(src, dest) {
 
 function setupCommiter() {
   const args = process.argv.slice(2);
+
+  // `commiter release [patch|minor|major] [flags]` is the single release entry
+  // point. It must be dispatched before the "this is not a commit tool" guard.
+  if (args[0] === 'release') {
+    runReleaseCommand(args);
+    return;
+  }
 
   // If arguments are passed, it's likely someone is trying to use this as a commit tool
   if (args.length > 0) {
@@ -222,5 +274,5 @@ if (require.main === module) {
   setupCommiter();
 }
 
-module.exports = { setupCommiter, ensureSafeTestScript };
+module.exports = { setupCommiter, ensureSafeTestScript, parseReleaseArgs };
 // Test change for complete release
