@@ -18,6 +18,10 @@ const WRITER = [
   "'use strict';",
   "const fs = require('node:fs');",
   "const path = require('node:path');",
+  "if (process.env.EXTRA_SYMLINK) {",
+  "  fs.symlinkSync(process.env.EXTRA_SYMLINK, 'docs/link', process.platform === 'win32' ? 'junction' : 'dir');",
+  "  process.exit(0);",
+  "}",
   "const target = process.env.EXTRA_FILE || 'docs/AI_CONTEXT.md';",
   "const version = JSON.parse(fs.readFileSync('package.json', 'utf8')).version;",
   "fs.mkdirSync(path.dirname(target), { recursive: true });",
@@ -61,12 +65,14 @@ function fixture(t, { additionalFiles, extraFile = 'docs/AI_CONTEXT.md' } = {}) 
   return { root, cwd, origin, extraFile };
 }
 
-function release(fixtureValue) {
+function release(fixtureValue, env = {}) {
   process.env.EXTRA_FILE = fixtureValue.extraFile;
+  for (const [key, value] of Object.entries(env)) process.env[key] = value;
   try {
     return runRelease({ cwd: fixtureValue.cwd, log: () => {} });
   } finally {
     delete process.env.EXTRA_FILE;
+    for (const key of Object.keys(env)) delete process.env[key];
   }
 }
 
@@ -157,4 +163,30 @@ test('additionalFiles must be an array of non-empty strings', (t) => {
 
   assert.equal(result.state, 'FAILED', result.reason);
   assert.match(result.reason, /must be an array/i);
+});
+
+test('a symlink created after preflight cannot smuggle an outside file', (t) => {
+  const f = fixture(t, { additionalFiles: ['docs/link/secret.md'] });
+  const outside = path.join(f.root, 'outside');
+  fs.mkdirSync(outside, { recursive: true });
+  fs.writeFileSync(path.join(outside, 'secret.md'), 'secret\n');
+
+  // The config is validated before generation; the hook then replaces the path
+  // with a junction that points outside the repository.
+  const result = release(f, { EXTRA_SYMLINK: outside });
+
+  assert.equal(result.state, 'FAILED', result.reason);
+  assert.match(result.reason, /escapes the repository/i);
+});
+
+test('a dirty tree is still rejected when additionalFiles is configured', (t) => {
+  const f = fixture(t, { additionalFiles: ['docs/AI_CONTEXT.md'] });
+  fs.writeFileSync(path.join(f.cwd, 'dirty.txt'), 'dirty\n');
+  const before = git(f.cwd, 'rev-parse', 'HEAD');
+
+  const result = release(f);
+
+  assert.equal(result.state, 'FAILED', result.reason);
+  assert.match(result.reason, /not clean/i);
+  assert.equal(git(f.cwd, 'rev-parse', 'HEAD'), before);
 });

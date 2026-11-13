@@ -269,3 +269,47 @@ test('10. a lightweight tag history does not disturb the new annotated tag', (t)
   assert.equal(git(cwd, 'cat-file', '-t', 'refs/tags/v1.0.0'), 'commit');
   assert.equal(git(cwd, 'rev-parse', 'refs/tags/v1.0.0'), original);
 });
+
+test('11. a transport failure is UNKNOWN, not REJECTED', (t) => {
+  const { root, origin } = seed(t);
+  const cwd = clone(root, origin, 'transport');
+  // The push fails with a transport error, not a server rejection. The remote
+  // may still receive the push later, so this must never become REJECTED.
+  hook(path.join(cwd, '.git'), 'pre-push', [
+    "echo \"fatal: unable to access 'https://example.invalid/repo.git/': Connection timed out\" >&2",
+    'exit 1'
+  ].join('\n'));
+
+  const result = runRelease({ cwd, log: () => {} });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.state, 'UNKNOWN', result.reason);
+  assert.equal(git(cwd, 'tag', '-l'), 'v1.0.1');
+  assert.equal(git(cwd, 'rev-parse', 'refs/tags/v1.0.1^{commit}'), git(cwd, 'rev-parse', 'HEAD'));
+});
+
+test('12. a rewritten remote branch is UNKNOWN, not a concurrent release', (t) => {
+  const { root, origin } = seed(t);
+  const winner = clone(root, origin, 'winner');
+  const loser = clone(root, origin, 'loser');
+
+  // Rewrite the branch with an unrelated history, then force-push it.
+  git(winner, 'checkout', '--orphan', 'rewritten');
+  git(winner, 'rm', '-rf', '.');
+  fs.writeFileSync(path.join(winner, 'package.json'), `${JSON.stringify({ name: 'rewritten', version: '1.0.0' }, null, 2)}\n`);
+  git(winner, 'add', '-A');
+  git(winner, 'commit', '-m', 'rewritten root');
+  git(winner, 'tag', '-a', 'v1.0.1', '-m', 'rewritten');
+
+  hook(path.join(loser, '.git'), 'pre-push', [
+    `git -C "${posix(winner)}" push --force origin rewritten:main "refs/tags/v1.0.1:refs/tags/v1.0.1"`,
+    'exit 0'
+  ].join('\n'));
+
+  const result = runRelease({ cwd: loser, log: () => {} });
+
+  assert.equal(result.ok, false);
+  assert.equal(result.state, 'UNKNOWN', result.reason);
+  // UNKNOWN never rolls back destructively.
+  assert.equal(git(loser, 'tag', '-l'), 'v1.0.1');
+});
