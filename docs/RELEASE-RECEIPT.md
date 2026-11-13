@@ -76,3 +76,33 @@ not a success.
 The receipt is additive. Repositories that never read it are unaffected, and a
 release that cannot write it still succeeds. No existing field, exit code or
 state name changed.
+
+## Durability and retention
+
+The receipt lives on the release host, inside the clone. That is enough for
+troubleshooting, but it is not durable storage: a re-clone, a disk loss or a
+`git clean` of `.git` removes it.
+
+Recommended practice, in order of cost:
+
+1. **Keep the local receipt as a troubleshooting artifact.** It is the first
+   thing to read when a release is questioned, and it costs nothing.
+2. **Archive it when a CI or monitoring pipeline already exists.** Copy
+   `.git/commiter-receipts/*.json` into the pipeline artifact for the release
+   commit. Do not add a pipeline only for this.
+3. **Tie the receipt to the release commit and tag OID.** The receipt already
+   records both, so an archived copy can be matched against
+   `git ls-remote` at any later date.
+4. **Never backfill.** A receipt written after the fact is not evidence that the
+   engine ran; it is a reconstruction. The MGM v1.0.14 release has no receipt
+   and must not be given one.
+
+Automatic export to a central store is a separate change: it needs a destination,
+credentials and a retention policy. It is deliberately out of scope here.
+
+## Retention
+
+Keep receipts for at least as long as the release is deployed, and for the
+lifetime of any incident that references it. A receipt is small (about 1 KB), so
+keeping every receipt for a repository is cheap.
+

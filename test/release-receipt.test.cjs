@@ -14,7 +14,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const {execFileSync} = require('node:child_process');
-const {runRelease, sanitizeRemote, receiptDirectory, buildReceipt} = require('../lib/release');
+const {runRelease, sanitizeRemote, receiptDirectory, buildReceipt, writeReceipt} = require('../lib/release');
 
 const git = (cwd, ...args) => execFileSync('git', args, {cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe']}).trim();
 
@@ -127,4 +127,40 @@ test('a receipt write failure does not change the release result', (t) => {
   const result = runRelease({cwd, log: () => {}});
   assert.equal(result.ok, true, 'a receipt failure must not fail a published release');
   assert.equal(result.state, 'PUBLISHED');
+});
+
+test('two receipts written in the same millisecond never collide', (t) => {
+  const {cwd} = fixture(t);
+  const base = {
+    cwd, branch: 'main', releaseType: 'patch', originalHead: 'a'.repeat(40),
+    createdCommit: 'b'.repeat(40), createdTag: 'v1.0.1',
+    facts: {localTag: 'c'.repeat(40), remoteCommit: 'b'.repeat(40), remoteTag: 'c'.repeat(40)},
+    result: 'PUBLISHED'
+  };
+  const first = buildReceipt(base);
+  const second = buildReceipt(base);
+  // Force the same timestamp so only the unique suffix can separate them.
+  second.timestamp = first.timestamp;
+  const fileA = writeReceipt(cwd, first);
+  const fileB = writeReceipt(cwd, second);
+  assert.ok(fileA && fileB);
+  assert.notEqual(fileA, fileB, 'two receipts in the same millisecond shared a filename');
+  assert.equal(receipts(cwd).length, 2);
+});
+
+test('an existing receipt is never overwritten', (t) => {
+  const {cwd} = fixture(t);
+  const receipt = buildReceipt({
+    cwd, branch: 'main', releaseType: 'patch', originalHead: 'a'.repeat(40),
+    createdCommit: 'b'.repeat(40), createdTag: 'v1.0.1',
+    facts: {localTag: 'c'.repeat(40), remoteCommit: 'b'.repeat(40), remoteTag: 'c'.repeat(40)},
+    result: 'PUBLISHED'
+  });
+  const file = writeReceipt(cwd, receipt);
+  assert.ok(file);
+  const before = fs.readFileSync(file, 'utf8');
+  // A second write with the same name must not replace the first.
+  const again = writeReceipt(cwd, receipt);
+  assert.notEqual(again, file, 'the second write reused the first filename');
+  assert.equal(fs.readFileSync(file, 'utf8'), before, 'the first receipt was overwritten');
 });
