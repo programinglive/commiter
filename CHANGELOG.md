@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/programinglive/commiter/compare/v1.5.1...v1.6.0) (2026-11-13)
+
+
+### ✨ Features
+
+* **release:** support validated additional release files ([f87ce93](https://github.com/programinglive/commiter/commit/f87ce93aef24ace8c4d086c04c832556726399f8))
+
+
+### 📝 Documentation
+
+* **plan:** record the 1.5.1 engine and the ERP contract test ([f610e2b](https://github.com/programinglive/commiter/commit/f610e2bca2371cc8682d380e250d04e1d81b0580))
+* **release:** add the first production release checklist ([73b82b2](https://github.com/programinglive/commiter/commit/73b82b2e470323c9cd232b4474350e5a207c51ca))
+* **release:** document recovery and configuration ([5eadcee](https://github.com/programinglive/commiter/commit/5eadcee55f968ee2c7ceb50972259b68105f7e9b))
+
+
+### 🐛 Bug Fixes
+
+* **release:** classify concurrent publication failures safely ([c78bceb](https://github.com/programinglive/commiter/commit/c78bcebc2f108cf90afc5e7b004422cef923dd59))
+* **release:** keep transport failures UNKNOWN and revalidate staged paths ([32ca277](https://github.com/programinglive/commiter/commit/32ca27749c2e4b0b1cbd3beee5acd05188696a39))
+
+
+### ✅ Tests
+
+* **release:** cover failure classification and path safety ([0d8daf3](https://github.com/programinglive/commiter/commit/0d8daf3020e3e2afd2d47d6ac0dc0625cf9e26af))
+* **release:** cover transport failure and post-preflight symlink ([0621ddb](https://github.com/programinglive/commiter/commit/0621ddbc29524edd10eacdc64670dd45e179d5fd))
+
 ### [1.5.1](https://github.com/programinglive/commiter/compare/v1.5.0...v1.5.1) (2026-11-12)
 
 

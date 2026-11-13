@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.6.0 | 2026-11-13 | **release:** support validated additional release files (f87ce93) |
 | 1.5.1 | 2026-11-12 | **plan:** migrate the eight repos to release v2 (ad0457f) |
 | 1.5.0 | 2026-11-12 | **release:** create the GitHub Release and deploy the site from one tag (#1) (ecaa6a6) |
 | 1.3.0 | 2026-11-06 | enforce test cases presence and execution before commit in pre-commit hook (5867720) |
@@ -87,6 +88,23 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.6.0
+
+Released on **2026-11-13**.
+
+- **release:** support validated additional release files (f87ce93)
+- **plan:** record the 1.5.1 engine and the ERP contract test (f610e2b)
+- **release:** add the first production release checklist (73b82b2)
+- **release:** document recovery and configuration (5eadcee)
+- **release:** classify concurrent publication failures safely (c78bceb)
+- **release:** keep transport failures UNKNOWN and revalidate staged paths (32ca277)
+- **release:** cover failure classification and path safety (0d8daf3)
+- **release:** cover transport failure and post-preflight symlink (0621ddb)
+- **plan:** migrate the eight repos to release v2 (ad0457f)
+- **web:** show v1.5.0 and the atomic release flow (17478c9)
+- **release:** translate engine messages to English (e110be5)
 
 ## 1.5.1
 
