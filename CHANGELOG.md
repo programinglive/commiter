@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://github.com/programinglive/commiter/compare/v1.6.0...v1.6.1) (2026-11-13)
+
+
+### 🐛 Bug Fixes
+
+* **release:** report path escapes before allowlist misses ([80811b1](https://github.com/programinglive/commiter/commit/80811b14529dd4e15d05d7c63e683bb752e4a36b))
+
 ## [1.6.0](https://github.com/programinglive/commiter/compare/v1.5.1...v1.6.0) (2026-11-13)
 
 

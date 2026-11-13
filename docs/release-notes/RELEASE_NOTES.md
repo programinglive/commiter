@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.6.1 | 2026-11-13 | **release:** report path escapes before allowlist misses (80811b1) |
 | 1.6.0 | 2026-11-13 | **release:** support validated additional release files (f87ce93) |
 | 1.5.1 | 2026-11-12 | **plan:** migrate the eight repos to release v2 (ad0457f) |
 | 1.5.0 | 2026-11-12 | **release:** create the GitHub Release and deploy the site from one tag (#1) (ecaa6a6) |
@@ -89,6 +90,13 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.6.1
+
+Released on **2026-11-13**.
+
+- **release:** report path escapes before allowlist misses (80811b1)
 
 ## 1.6.0
 
