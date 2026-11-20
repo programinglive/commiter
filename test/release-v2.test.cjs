@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const {execFileSync} = require('node:child_process');
-const {runRelease, parseReleaseOptions, predictVersion, syncReadme} = require('../lib/release');
+const {runRelease, parseReleaseOptions, predictVersion, syncReadme, configFor} = require('../lib/release');
 const git = (cwd, ...args) => execFileSync('git',args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(),'commiter-v2-'));
@@ -57,4 +57,13 @@ test('sync README replaces all version lines',t=>{
   fs.writeFileSync(path.join(cwd,'README.md'),'- **Versi**: 1.0.0 (tag `v1.0.0`)\n- **Versi**: 1.0.0 (tag `v1.0.0`)\n');
   syncReadme(cwd,'1.0.1');
   assert.equal(fs.readFileSync(path.join(cwd,'README.md'),'utf8').match(/v1\.0\.1/g).length,2);
+});
+test('configFor prefixes php for POSIX vendor/bin test scripts on win32',t=>{
+  const {cwd}=fixture(t);
+  const pkg={name:'clinic',version:'1.0.0',scripts:{test:'vendor/bin/paratest --processes=4 --runner=WrapperRunner'}};
+  assert.equal(configFor(pkg,cwd,'win32').verify,'php vendor/bin/paratest --processes=4 --runner=WrapperRunner');
+  assert.equal(configFor(pkg,cwd,'linux').verify,'npm test');
+  const explicitPkg={name:'clinic',version:'1.0.0',commiter:{release:{verify:'./vendor/bin/phpunit --stop-on-failure'}}};
+  assert.equal(configFor(explicitPkg,cwd,'win32').verify,'php vendor/bin/phpunit --stop-on-failure');
+  assert.equal(configFor(explicitPkg,cwd,'linux').verify,'./vendor/bin/phpunit --stop-on-failure');
 });

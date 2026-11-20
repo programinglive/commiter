@@ -225,3 +225,27 @@ test('verifyTests succeeds when test files exist and tests pass', () => {
     cleanupTempDir(tempDir);
   }
 });
+
+test('detectTestCommand prefixes php for POSIX vendor/bin scripts on win32', () => {
+  const tempDir = createTempDir();
+  try {
+    fs.writeFileSync(path.join(tempDir, 'package.json'), JSON.stringify({
+      name: 'clinic',
+      scripts: { test: 'vendor/bin/paratest --processes=4 --runner=WrapperRunner' }
+    }));
+
+    const winResult = verifyTestsModule.detectTestCommand({ cwd: tempDir, env: {}, platform: 'win32' });
+    assert.deepStrictEqual(winResult, {
+      command: 'php',
+      args: ['vendor/bin/paratest', '--processes=4', '--runner=WrapperRunner']
+    });
+
+    const linuxResult = verifyTestsModule.detectTestCommand({ cwd: tempDir, env: {}, platform: 'linux' });
+    assert.deepStrictEqual(linuxResult, {
+      command: 'npm',
+      args: ['test']
+    });
+  } finally {
+    cleanupTempDir(tempDir);
+  }
+});

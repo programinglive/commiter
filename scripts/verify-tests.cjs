@@ -120,7 +120,7 @@ function isPlaceholderTestScript(script) {
   return false;
 }
 
-function detectTestCommand({ cwd = process.cwd(), env = process.env } = {}) {
+function detectTestCommand({ cwd = process.cwd(), env = process.env, platform = process.platform } = {}) {
   // Check package.json
   const packageJsonPath = path.join(cwd, 'package.json');
   if (fs.existsSync(packageJsonPath)) {
@@ -128,6 +128,11 @@ function detectTestCommand({ cwd = process.cwd(), env = process.env } = {}) {
       const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
       const scripts = packageJson.scripts || {};
       if (scripts.test && !isPlaceholderTestScript(scripts.test)) {
+        const trimmedTest = scripts.test.trim();
+        if (platform === 'win32' && /^(?:\.\/)?vendor\/bin\/\S+/.test(trimmedTest)) {
+          const tokens = trimmedTest.replace(/^\.\//, '').split(/\s+/);
+          return { command: 'php', args: tokens };
+        }
         const packageManager = detectPackageManager({ env, cwd });
         return { command: packageManager, args: ['test'] };
       }
@@ -150,13 +155,19 @@ function detectTestCommand({ cwd = process.cwd(), env = process.env } = {}) {
     }
     // Check vendor binaries
     if (fs.existsSync(path.join(cwd, 'vendor', 'bin', 'paratest'))) {
-      return { command: 'vendor/bin/paratest', args: ['--processes=4', '--runner=WrapperRunner'] };
+      return platform === 'win32'
+        ? { command: 'php', args: ['vendor/bin/paratest', '--processes=4', '--runner=WrapperRunner'] }
+        : { command: 'vendor/bin/paratest', args: ['--processes=4', '--runner=WrapperRunner'] };
     }
     if (fs.existsSync(path.join(cwd, 'vendor', 'bin', 'pest'))) {
-      return { command: 'vendor/bin/pest', args: [] };
+      return platform === 'win32'
+        ? { command: 'php', args: ['vendor/bin/pest'] }
+        : { command: 'vendor/bin/pest', args: [] };
     }
     if (fs.existsSync(path.join(cwd, 'vendor', 'bin', 'phpunit'))) {
-      return { command: 'vendor/bin/phpunit', args: [] };
+      return platform === 'win32'
+        ? { command: 'php', args: ['vendor/bin/phpunit'] }
+        : { command: 'vendor/bin/phpunit', args: [] };
     }
   }
 
