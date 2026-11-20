@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.2](https://github.com/programinglive/commiter/compare/v1.6.1...v1.6.2) (2026-11-20)
+
+
+### ✨ Features
+
+* **release:** write an auditable receipt for every release ([3105d30](https://github.com/programinglive/commiter/commit/3105d30f88ccc58f31c330ded3333c78a8847ae5))
+* **release:** write an auditable receipt for every release ([#7](https://github.com/programinglive/commiter/issues/7)) ([a171048](https://github.com/programinglive/commiter/commit/a171048f12cbedd8f016a9ce9069bb0e46accda2))
+
+
+### 🐛 Bug Fixes
+
+* **release:** make receipt filenames collision-resistant and never overwrite ([cdf2328](https://github.com/programinglive/commiter/commit/cdf2328f9deaa4f7b72351ac3c4383cbf589f244))
+* **release:** prefix php for POSIX vendor/bin test scripts on Windows ([4a465fc](https://github.com/programinglive/commiter/commit/4a465fcaaf72f33a3825023a80773600e103dbbe))
+
 ### [1.6.1](https://github.com/programinglive/commiter/compare/v1.6.0...v1.6.1) (2026-11-13)
 
 

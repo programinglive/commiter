@@ -4,6 +4,7 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.6.2 | 2026-11-20 | **release:** write an auditable receipt for every release (3105d30) |
 | 1.6.1 | 2026-11-13 | **release:** report path escapes before allowlist misses (80811b1) |
 | 1.6.0 | 2026-11-13 | **release:** support validated additional release files (f87ce93) |
 | 1.5.1 | 2026-11-12 | **plan:** migrate the eight repos to release v2 (ad0457f) |
@@ -91,6 +92,17 @@ This document summarizes every published version of `@programinglive/commiter`. 
 
 
 
+
+
+## 1.6.2
+
+Released on **2026-11-20**.
+
+- **release:** write an auditable receipt for every release (3105d30)
+- **release:** write an auditable receipt for every release (#7) (a171048)
+- **release:** make receipt filenames collision-resistant and never overwrite (cdf2328)
+- **release:** prefix php for POSIX vendor/bin test scripts on Windows (4a465fc)
+- **release:** report path escapes before allowlist misses (80811b1)
 
 ## 1.6.1
 
